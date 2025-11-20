@@ -5,5 +5,27 @@ module top #(
     input   logic rst,
     output  logic [DATA_WIDTH-1:0] a0    
 );
-    assign a0 = 32'd5;
+    
+assign a0 = 32'd5;
+
+
+
+data_unit1 data_unit(
+
+
+
+
+);
+
+
+
+
+
+
+
+
+
+
+
+
 endmodule

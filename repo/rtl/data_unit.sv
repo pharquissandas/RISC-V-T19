@@ -26,9 +26,11 @@ reg_file1 reg_file(
     .read_addr2(rs2),
     .write_addr(rd),
     .wd3(din),
-    .rd1(rd1),
-    .rd2(rd2),
-    .a0(a0)
+    .dout1(rd1),
+    .dout2(rd2),
+    .a0(a0),
+    .clk(clk),
+    .we3(reg_write)
 
 );
 
@@ -48,7 +50,6 @@ alu1 alu(
     .alu_ctrl(alu_ctrl),
     .alu_out(din),
     .eq(eq_out)
-
 
 );
 
