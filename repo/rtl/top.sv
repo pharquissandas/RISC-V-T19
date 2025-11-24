@@ -7,23 +7,26 @@ module top #(
     output  logic [DATA_WIDTH-1:0] a0    // x10 output
 );
 
+// control signals
 logic RegWrite;
-logic ALUsrc;
-logic ALUctrl;
-logic ImmSrc;
+logic ALUSrc;
+logic [2:0] ALUctrl;                    // 3-bit ALU control
+logic [1:0] ImmSrc;                     // 2-bit immediate 
+logic [1:0] ResultSrc
 logic PCsrc;
+logic MemWrite;
 logic EQ;
 
+// data wires
 logic [DATA_WIDTH-1:0] pc;
-logic [DATA_WIDTH-1:0] ImmOp;
-logic [DATA_WIDTH-1:0] PCtarget;
 logic [DATA_WIDTH-1:0] instr;
+logic [DATA_WIDTH-1:0] ImmOp;
 
+// register file address fields
 logic [ADDRESS_WIDTH-1:0] rs1;
 logic [ADDRESS_WIDTH-1:0] rs2;
 logic [ADDRESS_WIDTH-1:0] rd;
 
-assign pc_next = pc + ImmOp;
 // decode instruction fields
 assign rs1 = instr[19:15]; // source register 1
 assign rs2 = instr[24:20]; // source register 2
@@ -33,8 +36,8 @@ assign rd  = instr[11:7];  // destination register
 PC pc_module (
     .clk(clk),
     .rst(rst),
-    .ImmOp(PCtarget),
     .PCsrc(PCsrc),
+    .ImmOp(ImmOp),
     .pc(pc)
 );
 
@@ -49,9 +52,11 @@ control control (
     .instr(instr),
     .EQ(EQ),
     .RegWrite(RegWrite),
-    .ALUsrc(ALUsrc),
+    .ALUSrc(ALUSrc),
     .ALUctrl(ALUctrl),
     .ImmSrc(ImmSrc),
+    .ResultSrc(ResultSrc),
+    .MemWrite(MemWrite),
     .PCsrc(PCsrc)
 );
 
@@ -70,8 +75,10 @@ data_unit data_unit (
     .AD3(rd),
     .RegWrite(RegWrite),
     .ImmOp(ImmOp),
-    .ALUsrc(ALUsrc),
+    .ALUSrc(ALUSrc),
     .ALUctrl(ALUctrl),
+    .ResultSrc(ResultSrc),
+    .MemWrite(MemWrite),
     .EQ(EQ),
     .a0(a0)
 );
