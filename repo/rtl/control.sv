@@ -36,7 +36,7 @@ module control (
     alu_decoder alu_dec (
         .ALUOp(ALUOp),
         .funct3(funct3),
-        .funct7(funct7),
+        .funct75(funct7[5]),
         .ALUctrl(ALUctrl)
     );
 

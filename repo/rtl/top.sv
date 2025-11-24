@@ -12,7 +12,7 @@ logic RegWrite;
 logic ALUSrc;
 logic [2:0] ALUctrl;                    // 3-bit ALU control
 logic [1:0] ImmSrc;                     // 2-bit immediate 
-logic [1:0] ResultSrc
+logic [1:0] ResultSrc;
 logic PCsrc;
 logic MemWrite;
 logic EQ;
