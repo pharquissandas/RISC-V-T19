@@ -67,8 +67,14 @@ always_comb begin
         7'b0010011: begin
             RegWrite = 1'b1;
             ALUSrc   = 1'b1;
-            ALUOp    = 2'b10;
             ImmSrc   = 3'b000; // I-type immediate
+
+            case (funct3)
+                3'b000: ALUOp = 2'b00;
+            
+            default: ALUOp = 2'b10;
+
+            endcase
         end
 
         // AUIPC (U-type)
