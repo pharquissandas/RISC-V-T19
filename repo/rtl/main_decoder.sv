@@ -1,11 +1,11 @@
 module main_decoder (
     input logic [6:0]  opcode,     // 7-bit opcode field from the instruction
+    input logic [2:0]  funct3,     // 3-bit funct3 field from the instruction
     
     output logic       RegWrite,   // enable writing to register file
     output logic       ALUSrc,     // selects ALU second operand (0 = register, 1 = immediate)
     output logic       MemWrite,   // enable writing to data memory
     output logic [1:0] ResultSrc,  // control the source of data to write back to register file (00 = ALU, 01 = Memory, 10 = PC+4, 11 = imm)
-    output logic [1:0] PCSrc,      // control the source for the next PC value (00 = PC+4, 01 = PC + imm(branch/jal), 10 = ALUResult (jalr))
     output logic       Branch,     // indicates branch instruction
     output logic       Jump,       // indicates jump instruction
     output logic [2:0] ImmSrc,     // selects type of immediate (I = 000, S = 001, B = 010, J = 011, U = 100)
@@ -20,7 +20,6 @@ always_comb begin
     ALUSrc   = 1'b0;
     MemWrite = 1'b0;
     ResultSrc = 2'b00;
-    PCSrc    = 2'b00;
     Branch   = 1'b0;
     Jump     = 1'b0;
     ImmSrc   = 3'b000;
@@ -59,7 +58,7 @@ always_comb begin
         7'b1100011: begin
             Branch    = 1'b1;
             ImmSrc    = 3'b010;   // B-type immediate
-            ALUOp     = 2'b01;   // ALU does SUB for comparison
+            ALUOp     = 2'b01;   // ALU does SUB for BEQ/BNE (other comparisons handled in ALU decoder)
         end
 
         // I-type arithmetic: ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
@@ -104,7 +103,6 @@ always_comb begin
             Jump      = 1'b1;
             ResultSrc = 2'b10;       // return address is PC+4 written to rd
             ImmSrc    = 3'b011;   // J-type immediate
-            PCSrc     = 2'b01;   // PC + imm
         end
 
         // JALR (I-type)
@@ -116,7 +114,6 @@ always_comb begin
             ImmSrc    = 3'b000;   // I-type immediate
             ALUSrc    = 1'b1;
             ALUOp     = 2'b00;   // ALU does ADD for address calculation
-            PCSrc     = 2'b10;   // ALU result (rs1 + imm)
         end
     endcase
 end

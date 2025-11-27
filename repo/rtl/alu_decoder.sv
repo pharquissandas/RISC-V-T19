@@ -11,9 +11,17 @@ module alu_decoder (
     always_comb begin
         case (ALUOp)
         
-            2'b00: ALUControl = 4'b0000; // add for lw/sw/addi/auipc/jalr/
+            2'b00: ALUControl = 4'b0000; // add for lw/sw/addi/auipc/jalr/lui(0 + imm)
 
-            2'b01: ALUControl = 4'b0001; // sub for beq/bne
+            2'b01: begin
+                unique case (funct3)
+                    3'b100: ALUControl = 4'b1000; // slt for blt
+                    3'b101: ALUControl = 4'b1000; // !slt for bge
+                    3'b110: ALUControl = 4'b1001; // sltu for bltu
+                    3'b111: ALUControl = 4'b1001; // !sltu for bgeu
+                    default: ALUControl = 4'b0001; // sub
+                endcase
+            end
 
             2'b10: begin // r-type/i-type
                 unique case (funct3)
