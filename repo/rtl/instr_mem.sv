@@ -1,4 +1,4 @@
-module instr_mem #(
+module instr_mem (
     /* verilator lint_off UNUSED */
     input logic [31:0] A,
     output logic [31:0] RD

@@ -1,4 +1,4 @@
-module control #(
+module control(
     input logic [6:0]  opcode,
     input logic [2:0]  funct3,
     input logic [6:0]  funct7,
@@ -45,7 +45,7 @@ module control #(
             // R-type instructions
             7'b0110011: begin
                 RegWrite = 1'b1;
-                ALUSrc = 1'b0;
+                ALUSrcB = 1'b0;
                
                 case(funct3)
                     3'b000: begin
