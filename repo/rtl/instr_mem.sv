@@ -1,18 +1,18 @@
-module imem (
+module instr_mem #(
     /* verilator lint_off UNUSED */
-    input  logic [31:0] addr,    // byte address from the program counter (PC)
-    output logic [31:0] instr    // 32-bit instruction read from memory
+    input logic [31:0] A,
+    output logic [31:0] RD
     /* verilator lint_on UNUSED */
 );
 
     // instruction memory array: 256 instructions, each 32 bits wide
-    logic [31:0] mem [0:255];
+    logic [31:0] rom_array [0:255];
 
     // preload instructions from an external hex file at simulation start
     initial begin
-        $readmemh("../rtl/program.hex", mem);
+        $readmemh("../rtl/program.hex", rom_array);
     end
 
     // output the instruction corresponding to the PC address
-    assign instr = mem[addr[9:2]]; 
+    assign RD = rom_array[A[9:2]]; 
 endmodule

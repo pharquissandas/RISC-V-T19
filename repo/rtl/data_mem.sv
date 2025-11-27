@@ -1,57 +1,49 @@
 module data_mem #(
-    parameter DATA_WIDTH = 32,
-              ADDRESS_WIDTH = 32
+    parameter XLEN = 32,
+    parameter ADDRESS_WIDTH = 16,
+    parameter DATA_WIDTH = 8
 ) (
-    input  logic                        clk,
-    input  logic                        en, // write enable
-    input  logic [ADDRESS_WIDTH-1:0]    wr_addr, // memory address
-    input  logic [DATA_WIDTH-1:0]       din, // data to write
-    input logic [2:0]                   funct3, // for byte/halfword/word selection
-    output logic [DATA_WIDTH-1:0]       dout // data read
+    input  logic clk,
+    input  logic WE, // write enable
+    input  logic [XLEN-1:0] A, // memory address
+    input  logic [XLEN-1:0] WD, // data to write
+    input  logic [2:0] AddressingControl, // funct3 to determine load/store type
+    output logic [XLEN-1:0] RD // data read
 );
+    logic [DATA_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0]; // 64KB data memory
 
-    // 2^32 32-bit memory locations
-    logic [DATA_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
+    logic [ADDRESS_WIDTH-1:0] addr;
+    assign addr = A[ADDRESS_WIDTH-1:0]; // use lower ADDRESS_WIDTH bits of address
 
-    case(funct3)
-        3'b000: begin // LB
-            assign dout = {{24{ram_array[wr_addr][7]}}, ram_array[wr_addr][7:0]};
-        end
-        3'b001: begin // LH
-            assign dout = {{16{ram_array[wr_addr][15]}}, ram_array[wr_addr][15:0]};
-        end
-        3'b010: begin // LW
-            assign dout = ram_array[wr_addr];
-        end
-        3'b100: begin // LBU
-            assign dout = {24'b0, ram_array[wr_addr][7:0]};
-        end
-        3'b101: begin // LHU
-            assign dout = {16'b0, ram_array[wr_addr][15:0]};
-        end
-        default: begin
-            assign dout = ram_array[wr_addr]; // read data from memory assynchronously
-
-        end
-    endcase
-    
     always_ff @(posedge clk) begin
-        if (en == 1'b1) begin
-            case(funct3)
-                3'b000: begin // SB
-                    ram_array[wr_addr][7:0] <= din[7:0];
+        if (WE) begin
+            case (AddressingControl)
+                3'b000: ram_array[addr] <= WD[7:0]; // SB
+                3'b001: begin                      // SH
+                    ram_array[addr]   <= WD[7:0];
+                    ram_array[addr+1] <= WD[15:8];
                 end
-                3'b001: begin // SH
-                    ram_array[wr_addr][15:0] <= din[15:0];
+                3'b010: begin                      // SW
+                    ram_array[addr]   <= WD[7:0];
+                    ram_array[addr+1] <= WD[15:8];
+                    ram_array[addr+2] <= WD[23:16];
+                    ram_array[addr+3] <= WD[31:24];
                 end
-                3'b010: begin // SW
-                    ram_array[wr_addr] <= din;
-                end
-                default: begin
-                    ram_array[wr_addr] <= din; // write data to memory synchronously
-                end
+                default: ; // ignore other funct3
             endcase
         end
     end
+
+    always_comb begin
+        case (AddressingControl)
+            3'b000: RD = {{24{ram_array[addr][7]}}, ram_array[addr]}; // LB (signed)
+            3'b001: RD = {{16{ram_array[addr+1][7]}}, ram_array[addr+1], ram_array[addr]}; // LH (signed)
+            3'b010: RD = {ram_array[addr+3], ram_array[addr+2], ram_array[addr+1], ram_array[addr]}; // LW
+            3'b100: RD = {24'b0, ram_array[addr]}; // LBU
+            3'b101: RD = {16'b0, ram_array[addr+1], ram_array[addr]}; // LHU
+            default: RD = 32'b0;
+        endcase
+    end
+
 
 endmodule
