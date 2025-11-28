@@ -36,6 +36,6 @@ module alu (
             default: ALUResult = 32'b0;
         endcase
 
-        Zero = 1'b0;
+        Zero = (ALUResult == 32'd0);
     end
 endmodule
