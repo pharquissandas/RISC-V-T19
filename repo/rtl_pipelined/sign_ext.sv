@@ -1,4 +1,4 @@
-module signext (
+module sign_ext (
     input  logic [31:7] Imm,
     input  logic [2:0]  ImmSrc,
     output logic [31:0] ImmExt

@@ -37,14 +37,14 @@ TEST_F(CpuTestbench, TestJalRet)
     EXPECT_EQ(top_->a0, 53);
 }
 
-// TEST_F(CpuTestbench, TestPdf)
-// {
-//     setupTest("5_pdf");
-//     setData("reference/gaussian.mem");
-//     initSimulation();
-//     runSimulation(CYCLES * 100);
-//     EXPECT_EQ(top_->a0, 15363);
-// }
+TEST_F(CpuTestbench, TestPdf)
+{
+    setupTest("5_pdf");
+    setData("reference/gaussian.mem");
+    initSimulation();
+    runSimulation(CYCLES * 100);
+    EXPECT_EQ(top_->a0, 15363);
+}
 
 // /* Instruction Coverage */ 
 

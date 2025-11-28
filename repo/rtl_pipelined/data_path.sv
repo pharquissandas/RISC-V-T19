@@ -66,7 +66,7 @@ module data_path (
         .a0(a0)
     );
 
-    signext signext_inst(
+    sign_ext sign_ext_inst(
         .Imm(Instr[31:7]),
         .ImmSrc(ImmSrc),
         .ImmExt(ImmExt)

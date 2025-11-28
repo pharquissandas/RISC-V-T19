@@ -5,9 +5,9 @@ module data_mem #(
 ) (
     input  logic clk,
     input  logic WE, // write enable
-    /* verilator lint_off UNUSED */
+    // verilator lint_off UNUSED
     input  logic [XLEN-1:0] A, // memory address
-    /* verilator lint_on UNUSED */
+    // verilator lint_on UNUSED
     input  logic [XLEN-1:0] WD, // data to write
     input  logic [2:0] AddressingControl, // funct3 to determine load/store type
     output logic [XLEN-1:0] RD // data read

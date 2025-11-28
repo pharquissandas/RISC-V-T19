@@ -6,7 +6,7 @@ module instr_mem (
 );
 
     // instruction memory array: 256 instructions, each 32 bits wide
-    logic [31:0] rom_array [0:255];
+    logic [31:0] rom_array [0:4095];
 
     // preload instructions from an external hex file at simulation start
     initial begin
@@ -14,5 +14,5 @@ module instr_mem (
     end
 
     // output the instruction corresponding to the PC address
-    assign RD = rom_array[A[9:2]]; 
+    assign RD = rom_array[A[13:2]];
 endmodule
