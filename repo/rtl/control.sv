@@ -24,7 +24,7 @@ module control(
     // assign opcode = Instr[6:0];
     // assign funct3 = Instr[14:12];
     // assign funct7 = Instr[31:25];
-    // assign AddressingControl = funct3; // store width
+    assign AddressingControl = funct3; // store width
 
     always_comb begin
         // Default values to prevent latches
