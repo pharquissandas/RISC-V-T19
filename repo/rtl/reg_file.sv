@@ -9,7 +9,8 @@ module reg_file #(
     input  logic [DATA_WIDTH-1:0]       WD3,          // write data
     input  logic                        WE3,          // write enable
     output logic [DATA_WIDTH-1:0]       RD1,        // register file output for rs1
-    output logic [DATA_WIDTH-1:0]       RD2          // register file output for rs2
+    output logic [DATA_WIDTH-1:0]       RD2,          // register file output for rs2
+    output logic [DATA_WIDTH-1:0]       a0          // register file output for testbenches
 
 );
 
@@ -25,5 +26,6 @@ module reg_file #(
     // read operations (combinational) -> outputs change immediately when read_addr changes
     assign RD1 = ram_array[AD1];
     assign RD2 = ram_array[AD2];
+    assign a0  = ram_array[5'b01010];
 
 endmodule

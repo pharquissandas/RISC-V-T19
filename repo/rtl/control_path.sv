@@ -1,5 +1,7 @@
 module control_path(
-    output logic [31:0]  Instr,
+    /* verilator lint_off UNUSED */
+    input logic [31:0]  Instr,
+    /* verilator lint_on UNUSED */
     input  logic         Zero,
 
     output logic [1:0] PCSrc, // control the source for the next PC value (00 = PC+4, 01 = PC + imm(branch/jal), 10 = ALUResult (jalr))

@@ -1,7 +1,9 @@
 module top (
     input  logic clk,
     input  logic rst,
+    /* verilator lint_off UNUSED */
     input  logic trigger,
+    /* verilator lint_on UNUSED */
     output logic [31:0] a0
 );
 

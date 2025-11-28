@@ -22,7 +22,10 @@ always_comb begin
     case(PCSrc)
         2'b00: PCNext = PCPlus4;
         2'b01: PCNext = PCTarget;
+        /* verilator lint_off UNUSED */
         2'b10: PCNext = {ALUResult[31:2], 2'b00};  // word addressed << 2
+        /* verilator lint_on UNUSED */
+
     endcase
 
 end

@@ -21,7 +21,6 @@ module data_path (
 
     assign SrcA = ALUSrcA ? PC : ReadData1;
     assign SrcB = ALUSrcB ? ImmExt : ReadData2;
-    assign a0 = ALUResult;
 
     pc pc_inst(
         .clk(clk),
@@ -63,7 +62,8 @@ module data_path (
         .WD3(ResultData),
         .WE3(RegWrite),
         .RD1(ReadData1),
-        .RD2(ReadData2)
+        .RD2(ReadData2),
+        .a0(a0)
     );
 
     signext signext_inst(
