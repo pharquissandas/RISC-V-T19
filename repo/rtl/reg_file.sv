@@ -9,7 +9,8 @@ module reg_file #(
     input  logic [DATA_WIDTH-1:0]       WD3,          // write data
     input  logic                        WE3,          // write enable
     output logic [DATA_WIDTH-1:0]       RD1,        // register file output for rs1
-    output logic [DATA_WIDTH-1:0]       RD2,        // register file output for rs2
+    output logic [DATA_WIDTH-1:0]       RD2          // register file output for rs2
+
 );
 
     // 32 32-bit registers

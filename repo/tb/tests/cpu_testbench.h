@@ -44,7 +44,7 @@ public:
         top_->clk = 1;
         top_->rst = 1;
         top_->trigger = 0;
-        runSimulation(10);  // Process reset
+        runSimulation(10); // Process reset
         top_->rst = 0;
     }
 
@@ -75,8 +75,10 @@ public:
         tfp_->close();
 
         // Free memory
-        if (top_) delete top_;
-        if (tfp_) delete tfp_;
+        if (top_)
+            delete top_;
+        if (tfp_)
+            delete tfp_;
         delete context_;
 
         // Save data and program memory files to test_out directory
@@ -91,9 +93,9 @@ public:
     }
 
 protected:
-    VerilatedContext* context_;
-    Vdut* top_;
-    VerilatedVcdC* tfp_;
+    VerilatedContext *context_;
+    Vdut *top_;
+    VerilatedVcdC *tfp_;
     std::string name_;
     unsigned int ticks_;
 };

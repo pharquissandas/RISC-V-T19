@@ -1,6 +1,8 @@
 module top (
     input  logic clk,
-    input  logic rst
+    input  logic rst,
+    input  logic trigger,
+    output logic [31:0] a0
 );
 
     // Control signals
@@ -15,8 +17,8 @@ module top (
     logic [2:0] AddressingControl;
 
     // Datapath outputs
-    logic [31:0] Instr;
-    logic        Zero;
+    logic [31:0] Zero;
+    logic [31:0] Instr1;
 
     // Datapath
     data_path dp_inst (
@@ -34,7 +36,8 @@ module top (
         .AddressingControl(AddressingControl),
 
         .Instr(Instr),
-        .Zero(Zero)
+        .Zero(Zero),
+        .a0(a0)
     );
 
     // Control path

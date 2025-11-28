@@ -11,16 +11,17 @@ module data_path (
     input logic [1:0] ResultSrc,
     input logic [2:0] ImmSrc,
     input logic [2:0] AddressingControl,
-
+    
     output logic [31:0] Instr,
-    output logic Zero
+    output logic [31:0] Zero,
+    output logic [31:0] a0
 );
 
     logic [31:0] PC, PCPlus4, ImmExt, MemData, ALUResult, SrcA, SrcB, ReadData1, ReadData2, ResultData;
 
     assign SrcA = ALUSrcA ? PC : ReadData1;
     assign SrcB = ALUSrcB ? ImmExt : ReadData2;
-
+    assign a0 = ALUResult;
 
     pc pc_inst(
         .clk(clk),

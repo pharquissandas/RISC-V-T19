@@ -1,6 +1,6 @@
 module control_path(
-    input logic [31:0] Instr,
-    input  logic       Zero,
+    output logic [31:0]  Instr,
+    input  logic [31:0] Zero,
 
     output logic [1:0] PCSrc, // control the source for the next PC value (00 = PC+4, 01 = PC + imm(branch/jal), 10 = ALUResult (jalr))
     output logic RegWrite,  // enable write to register
