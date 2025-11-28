@@ -18,7 +18,7 @@ module top (
 
     // Datapath outputs
     logic [31:0] Zero;
-    logic [31:0] Instr1;
+    logic [31:0] Instr;
 
     // Datapath
     data_path dp_inst (
