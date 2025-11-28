@@ -17,7 +17,7 @@ module top (
     logic [2:0] AddressingControl;
 
     // Datapath outputs
-    logic [31:0] Zero;
+    logic        Zero;
     logic [31:0] Instr;
 
     // Datapath

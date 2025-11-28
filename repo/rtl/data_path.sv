@@ -13,7 +13,7 @@ module data_path (
     input logic [2:0] AddressingControl,
     
     output logic [31:0] Instr,
-    output logic [31:0] Zero,
+    output logic        Zero,
     output logic [31:0] a0
 );
 

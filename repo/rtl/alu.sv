@@ -15,7 +15,7 @@ module alu (
     input logic [31:0] SrcB,
     input logic [3:0] ALUControl,
     output logic [31:0] ALUResult,
-    output logic [31:0] Zero
+    output logic        Zero
 );
 
     always_comb begin
@@ -36,6 +36,6 @@ module alu (
             default: ALUResult = 32'b0;
         endcase
 
-        Zero = 32'b0;
+        Zero = 1'b0;
     end
 endmodule
