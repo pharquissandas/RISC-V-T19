@@ -4,12 +4,15 @@ module decode(
     input logic        WD3,    
     input logic [31:0] A3,    //data from writeback stage to write into regfile
     input logic        WE3, 
+    input logic [31:0] PCF,
+    input logic [31:0] PCPlus4F,
 
     output logic [31:0] RD1, //regfile output 1
     output logic [31:0] RD2, //regfile output 2
     output logic [31:0] ExtImmd,
     output logic [19:15] Rs1D,
     output logic [24:20] Rs2D,
+    output logic [11:7]  RdD,
     output logic        RegWriteD,
     output logic [1:0]  ResultSrcD,
     output logic        MemWriteD,
@@ -20,7 +23,9 @@ module decode(
     output logic        AluSrcBD,
     output logic        ALUSrcAD,
     output logic [2:0]  AddressingControlD,
-    output logic [31:0] a0D
+    output logic [31:0] a0D,
+    output logic [31:0] PCD,
+    output logic [31:0] PCPlus4D
 
 );
 
@@ -46,7 +51,9 @@ always_comb begin
     
     Rs1D = InstrD[19:15];
     Rs2D = InstrD[24:20];
-    
+    RdD = InstrD[11:7];
+    PCPlus4D = PCPlus4F;
+    PCD = PCF;
 end
 
 
