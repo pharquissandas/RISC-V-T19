@@ -92,6 +92,7 @@ module top (
     logic        FEN;
     logic        DEN;      
     logic        RSTE;   
+    logic        RSTD;
 
 
 
@@ -172,6 +173,7 @@ module top (
         .RdD(RdD),
         .ImmExtD(ImmExtD),
         .PCPlus4D(PCPlus4D),
+        .rst(RSTD),
 
         .RegWriteE(RegWriteE),
         .ResultSrcE(ResultSrcE),
@@ -299,12 +301,14 @@ module top (
         .RD1E(RD1E),
         .RD2E(RD2E),
         .ResultSrcE(ResultSrcE),
+        .PCSrcE(PCSrcE),
 
         .SrcAE(SrcAE),
         .WriteDataE(WriteDataE),
         .FEN(FEN),
         .DEN(DEN),
-        .RSTE(RSTE)
+        .RSTE(RSTE),
+        .RSTD(RSTD)
 
     );
 
