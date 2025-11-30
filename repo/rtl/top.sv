@@ -286,6 +286,8 @@ module top (
 
     hazard_unit_top hazard_unit_top1(
 
+        .Rs1D(Rs1D),
+        .Rs2D(Rs2D),    
         .Rs1E(Rs1E),
         .Rs2E(Rs2E),
         .RdM(RdM),
@@ -296,6 +298,7 @@ module top (
         .ResultW(ResultW),
         .RD1E(RD1E),
         .RD2E(RD2E),
+        .ResultSrcE(ResultSrcE),
 
         .SrcAE(SrcAE),
         .WriteDataE(WriteDataE),
