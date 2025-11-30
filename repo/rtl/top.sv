@@ -30,18 +30,18 @@ module top (
     logic        RegWriteW;
     logic [31:0] RD1D;
     logic [31:0] RD2D;
-    logic [31:0] ExtImmD;
+    logic [31:0] ImmExtD;
     logic [4:0]  Rs1D;
     logic [4:0]  Rs2D;
     logic [4:0]  RdD;
     logic        RegWriteD;
     logic        ResultSrcD;
     logic        MemWriteD;
-    logic        JumpD;
+    logic [1:0]  JumpD;
     logic        BranchD;
     logic [2:0]  BranchTypeD;
-    logic [1:0]  ALUControlD;
-    logic        AluSrcBD;
+    logic [3:0]  ALUControlD;
+    logic        ALUSrcBD;
     logic        ALUSrcAD;
     logic [2:0]  AddressingControlD;
     logic        RegWriteE;
@@ -92,6 +92,7 @@ module top (
     logic [1:0] ForwardBE;
 
     logic [31:0] WriteDataE;
+    logic [2:0] ImmSrcD;
 
 
     fetch fetch1(
@@ -123,6 +124,7 @@ module top (
 
     decode decode1(
         
+        .clk(clk),
         .InstrD(InstrD),
         .WD3(ResultW),
         .A3(RdW),
@@ -130,7 +132,7 @@ module top (
 
         .RD1(RD1D),
         .RD2(RD2D),
-        .ExtImmD(ExtImmD),
+        .ImmExtD(ImmExtD),
         .Rs1D(Rs1D),
         .Rs2D(Rs2D),
         .RdD(RdD),
@@ -141,10 +143,11 @@ module top (
         .BranchD(BranchD),
         .BranchTypeD(BranchTypeD),
         .ALUControlD(ALUControlD),
-        .AluSrcBD(ALUSrcBD),
+        .ALUSrcBD(ALUSrcBD),
         .ALUSrcAD(ALUSrcAD),
         .AddressingControlD(AddressingControlD),
-        .a0D(a0)
+        .a0D(a0),
+        .ImmSrcD(ImmSrcD)
 
     );
 
@@ -203,14 +206,14 @@ module top (
         .JumpE(JumpE),
         .BranchE(BranchE),
         .ALUControlE(ALUControlE),
-        .ALUSrcAE(ALUSrcAD),
-        .ALUSrcBE(ALUSrcBD),
+        .ALUSrcAE(ALUSrcBE),
+        .ALUSrcBE(ALUSrcBE),
         .RD1E(RD1E),
         .RD2E(RD2E),
         .PCE(PCE),
         .Rs1E(Rs1E),
         .Rs2E(Rs2E),
-        .ExtImmE(ExtImmE),
+        .ImmExtE(ImmExtE),
         .SrcAE(SrcAE),
         .WriteDataE(WriteDataE),
         .BranchTypeE(BranchTypeE),
@@ -251,6 +254,7 @@ module top (
         .MemWriteM(MemWriteM),
         .ALUResultM(ALUResultM),
         .WriteDataM(WriteDataM),
+        .AddressingControlM(AddressingControlM),
 
         .RDM(RDM)
 
