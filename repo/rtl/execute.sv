@@ -6,14 +6,15 @@ input logic        MemWriteE,
 input logic        JumpE,
 input logic        BranchE,
 input logic [1:0]  ALUControlE,
-input logic        ALUSrcE,
+input logic        ALUSrcAE,
+input logic        ALUSrcBE,
 input logic [31:0] RD1E,
 input logic [31:0] RD2E,
 input logic [31:0] PCE,
 input logic [4:0]  Rs1E,
 input logic [4:0]  Rs2E,
 input logic [31:0] ExtImmE,
-input logic [31:0] SrcAE,
+input logic [31:0] SrcAE, //comes from hazard unit
 input logic [31:0] WriteDataE,
 input logic [2:0]  BranchTypeE,
 
@@ -25,6 +26,10 @@ output logic [31:0] PCTargetE
 
 logic ZeroE;
 logic tmp;
+
+
+logic [31:0] SrcBE;
+logic [31:0] SrcAEE;
 
 always_comb begin
 
@@ -39,7 +44,7 @@ end
 
 mux mux2(
 
-    .s(ALUSrcE),
+    .s(ALUSrcBE),
     .d0(WriteDataE),
     .d1(ExtImmE),
     
@@ -47,10 +52,20 @@ mux mux2(
 
 );
 
+mux mux3(
+
+    .s(ALUSrcAE),
+    .d0(PCE),
+    .d1(SrcAE),
+    
+    .y(SrcAEE)
+
+);
+
 
 alu alu1(
 
-.SrcA(SrcAE),
+.SrcA(SrcAEE),
 .SrcB(SrcBE),
 .ALUControl(ALUControlE),
 

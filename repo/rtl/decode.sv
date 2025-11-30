@@ -21,8 +21,7 @@ module decode(
     output logic        AluSrcBD,
     output logic        ALUSrcAD,
     output logic [2:0]  AddressingControlD,
-    output logic [31:0] a0D,
-
+    output logic [31:0] a0D
 
 );
 

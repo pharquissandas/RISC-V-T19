@@ -1,4 +1,4 @@
-module fetch_to_decode_register(
+module decode_to_execute_register(
 
     input logic clk,
     input logic RegWriteD,

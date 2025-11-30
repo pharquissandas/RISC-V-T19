@@ -10,6 +10,7 @@ module fetch(
     output logic [31:0] InstrF,
     output logic [31:0] PCF,
     output logic [31:0] PCPlus4F
+
 );
 
 

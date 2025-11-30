@@ -18,8 +18,7 @@ module reg_file #(
     logic [DATA_WIDTH-1:0] ram_array [2**ADDRESS_WIDTH-1:0];
 
     // write operation (synchronous) -> writes occur only if WE3 is asserted
-    //write occurs on negative edge of clock cycle
-    always_ff @(negedge clk) begin
+    always_ff @(posedge clk) begin
         if (WE3 == 1'b1 && AD3 != 0)
             ram_array[AD3] <= WD3;
     end
