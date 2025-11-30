@@ -18,7 +18,7 @@ module fetch_to_decode_register(
     input logic [31:0] PCD,
     input logic [4:0] Rs1D,
     input logic [4:0] Rs2D,
-    input logic [4:0] RdD
+    input logic [4:0] RdD,
     input logic [31:0] ImmExtD,
     input logic [31:0] PCPlus4D,
 
@@ -32,7 +32,7 @@ module fetch_to_decode_register(
     output logic ALUSrcBE,
     output logic [2:0] ImmSrcE,
     output logic [2:0] AddressingControlE,
-    output logic [2:0] BranchTypeE
+    output logic [2:0] BranchTypeE,
 
     output logic [31:0] RD1E,
     output logic [31:0] RD2E,

@@ -15,6 +15,7 @@ input logic [4:0]  Rs2E,
 input logic [31:0] ExtImmE,
 input logic [31:0] SrcAE,
 input logic [31:0] WriteDataE,
+input logic [2:0]  BranchTypeE,
 
 output logic PCSrcE,
 output logic [31:0] ALUResultE,
@@ -27,8 +28,8 @@ logic tmp;
 
 always_comb begin
 
-    tmp = (ZeroE & BranchE);
-    PCSrcE = (tmp | JumpE);
+    //tmp = (ZeroE & BranchE); // is this needed?
+    //PCSrcE = (tmp | JumpE);
 
     PCTargetE  = PCE + ExtImmE;
 
@@ -55,6 +56,17 @@ alu alu1(
 
 .ALUResult(ALUResultE),
 .Zero(ZeroE)
+
+);
+
+pcsrc_unit pcsrc_unit1(
+
+.Jump(JumpE),
+.Branch(BranchE),
+.Zero(ZeroE),
+.BranchType(BranchTypeE),
+
+.PCSrc(PCSrcE)
 
 );
 

@@ -1,7 +1,7 @@
 module memory(
 
 input logic        clk,
-input logic        MemWriteM,
+input logic        MemWriteM, 
 input logic [31:0] ALUResultM,
 input logic [31:0] WriteDataM,
 

@@ -2,20 +2,18 @@ module fetch(
 
     input logic        clk,
     input logic        rst,
-    input logic        PCSrcE,
+    input logic [1:0]  PCSrcE,
     input logic [31:0] PCTargetE,
-    input logic [31:0] ImmExtE,
     input logic [31:0] ALUResultE,
 
 
     output logic [31:0] InstrF,
-    output logic [31:0] PCF
-
+    output logic [31:0] PCF,
+    output logic [31:0] PCPlus4F
 );
 
 
 logic [31:0] PCCurr;
-logic [31:0] PCPlus4F;
 logic [31:0] PCFNext;
 
 pc_pipeline pc_inst(
