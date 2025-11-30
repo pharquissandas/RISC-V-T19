@@ -33,30 +33,28 @@ module hazard_unit_top(
 //also if ResultSrcE = 10 then we are also changing the PC so flush
 //execution and decode
 
-always_comb begin
+// always_comb begin
 
-    case(ResultSrcE)
+//     case(ResultSrcE)
         
-        default: begin 
-            FEN = 1; 
-            DEN = 1;
-        end
-        2'b00: begin 
-            FEN = 1; 
-            DEN = 1;
-        end
-        2'b01: begin
-             FEN = 0; 
-             DEN = 0;
-        end
-        2'b10: begin
-            FEN = 1; 
-            DEN = 1;
-        end
-    endcase
-
-
-end
+//         default: begin 
+//             FEN = 1; 
+//             DEN = 1;
+//         end
+//         2'b00: begin 
+//             FEN = 1; 
+//             DEN = 1;
+//         end
+//         2'b01: begin
+//              FEN = 0; 
+//              DEN = 0;
+//         end
+//         2'b10: begin
+//             FEN = 1; 
+//             DEN = 1;
+//         end
+//     endcase
+// end
 
 logic [1:0] selAE;
 logic [1:0] selBE;
@@ -106,7 +104,7 @@ mux3input bemux(
 stall_unit stall_unit1(
 
     .ResultSrcE(ResultSrcE),
-    .RDE(RDE),
+    .RDE(RdE),
     .Rs1D(Rs1D),
     .Rs2D(Rs2D),
 

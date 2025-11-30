@@ -294,6 +294,7 @@ module top (
         .Rs2E(Rs2E),
         .RdM(RdM),
         .RdW(RdW),
+        .RdE(RdE),
         .RegWriteW(RegWriteW),
         .RegWriteM(RegWriteM),
         .ALUResultM(ALUResultM),
