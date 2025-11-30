@@ -1,3 +1,5 @@
+//implementation of the hazard unit was based upon teachings from Chapter 7.5 of Digital Design and Computer Architecture RISC-V Edition by Harris and Harris
+
 module hazard_unit_top(
 
     input logic [4:0] Rs1E, //source register from instruction in execution stage
@@ -10,10 +12,43 @@ module hazard_unit_top(
     input logic [31:0] ResultW,
     input logic [31:0] RD1E,
     input logic [31:0] RD2E,
+    input logic [1:0]  ResultSrcE,
 
     output logic [31:0] SrcAE,
-    output logic [31:0] WriteDataE
+    output logic [31:0] WriteDataE,
+    output logic        FEN,
+    output logic        DEN
 );
+
+//when we have a lw instruction in exectution stage the ResultSrcE = 01
+//this is when we stall the fetch and decode stages (for next cycle) to avoid
+//lw data hazard
+
+
+always_comb begin
+
+    case(ResultSrcE)
+        
+        default: begin 
+            FEN = 1; 
+            DEN = 1;
+        end
+        2'b00: begin 
+            FEN = 1; 
+            DEN = 1;
+        end
+        2'b01: begin
+             FEN = 0; 
+             DEN = 0;
+        end
+        2'b10: begin
+            FEN = 1; 
+            DEN = 1;
+        end
+    endcase
+
+
+end
 
 logic [1:0] selAE;
 logic [1:0] selBE;

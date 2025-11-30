@@ -89,6 +89,8 @@ module top (
     logic [31:0] WriteDataE;
     logic [31:0] PCPlus4E;
     logic [31:0] a0D;
+    logic        FEN;
+    logic        DEN;      
 
 
 
@@ -107,6 +109,7 @@ module top (
 
     fetch_to_decode_register ftdr(
 
+        .en(FEN),
         .clk(clk),
         .PCF(PCF),
         .PCPlus4F(PCPlus4F),
@@ -147,7 +150,8 @@ module top (
     );
 
     decode_to_execute_register dter(
-
+        
+        .en(DEN),
         .clk(clk),
         .RegWriteD(RegWriteD),
         .ResultSrcD(ResultSrcD),
@@ -292,7 +296,9 @@ module top (
         .RD2E(RD2E),
 
         .SrcAE(SrcAE),
-        .WriteDataE(WriteDataE)
+        .WriteDataE(WriteDataE),
+        .FEN(FEN),
+        .DEN(DEN)
 
     );
 

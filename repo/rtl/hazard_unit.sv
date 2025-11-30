@@ -1,5 +1,3 @@
-//implementation of hazard unit was based upon teachings from Chapter 7.5 of Digital Design and Computer Architecture RISC-V Edition by Harris and Harris
-
 module hazard_unit(
 
     input logic [4:0] Rs1E, //source register from instruction in execution stage
