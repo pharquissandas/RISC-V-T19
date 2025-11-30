@@ -6,7 +6,7 @@ module top (
 
     // Control signals
     logic [1:0] PCSrcE;
-    logic       RegWrite;
+    /*logic       RegWrite;
     logic [3:0] ALUControl;
     logic       ALUSrcA;
     logic       ALUSrcB;
@@ -16,7 +16,7 @@ module top (
     logic [2:0] AddressingControl;
 
     // Datapath outputs
-    logic        Zero;
+    logic        Zero;*/
     logic [31:0] InstrF;
     logic [31:0] InstrD;
     logic [31:0] PCTargetE;
@@ -26,7 +26,7 @@ module top (
     logic [31:0] PCPlus4F;
     logic [31:0] PCPlus4D;
     logic [31:0] ResultW;
-    logic        RdW;
+    logic [4:0] RdW;
     logic        RegWriteW;
     logic [31:0] RD1D;
     logic [31:0] RD2D;
@@ -35,7 +35,7 @@ module top (
     logic [4:0]  Rs2D;
     logic [4:0]  RdD;
     logic        RegWriteD;
-    logic        ResultSrcD;
+    logic [1:0]       ResultSrcD;
     logic        MemWriteD;
     logic [1:0]  JumpD;
     logic        BranchD;
@@ -53,7 +53,6 @@ module top (
     logic ALUSrcAE;
     logic ALUSrcBE;
     logic [31:0] SrcAE;
-    logic [2:0] ImmSrcE;
     logic [2:0] AddressingControlE;
     logic [2:0] BranchTypeE;
 
@@ -74,7 +73,7 @@ module top (
     logic MemWriteM;
     logic [2:0] AddressingControlM;
     logic [31:0] ALUResultM;
-    logic WriteDataM;
+    logic [31:0] WriteDataM;
     logic [4:0] RdM;
     logic [31:0] PCPlus4M;
     logic [31:0] RDM;
@@ -87,12 +86,8 @@ module top (
 
     logic [31:0] PCPlus4W;
 
-
-    logic [1:0] ForwardAE;
-    logic [1:0] ForwardBE;
-
     logic [31:0] WriteDataE;
-    logic [2:0] ImmSrcD;
+    logic [31:0] PCPlus4E;
 
 
     fetch fetch1(
@@ -146,9 +141,7 @@ module top (
         .ALUSrcBD(ALUSrcBD),
         .ALUSrcAD(ALUSrcAD),
         .AddressingControlD(AddressingControlD),
-        .a0D(a0),
-        .ImmSrcD(ImmSrcD)
-
+        .a0D(a0)
     );
 
     decode_to_execute_register dter(
@@ -162,7 +155,6 @@ module top (
         .ALUControlD(ALUControlD),
         .ALUSrcAD(ALUSrcAD),
         .ALUSrcBD(ALUSrcBD),
-        .ImmSrcD(ImmSrcD),
         .AddressingControlD(AddressingControlD),
         .BranchTypeD(BranchTypeD),
         .RD1D(RD1D),
@@ -182,7 +174,6 @@ module top (
         .ALUControlE(ALUControlE),
         .ALUSrcAE(ALUSrcAE),
         .ALUSrcBE(ALUSrcBE),
-        .ImmSrcE(ImmSrcE),
         .AddressingControlE(AddressingControlE),
         .BranchTypeE(BranchTypeE),
         .RD1E(RD1E),
@@ -206,7 +197,7 @@ module top (
         .JumpE(JumpE),
         .BranchE(BranchE),
         .ALUControlE(ALUControlE),
-        .ALUSrcAE(ALUSrcBE),
+        .ALUSrcAE(ALUSrcAE),
         .ALUSrcBE(ALUSrcBE),
         .RD1E(RD1E),
         .RD2E(RD2E),

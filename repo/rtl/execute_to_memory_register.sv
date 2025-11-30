@@ -7,7 +7,7 @@ module execute_to_memory_register (
     input logic [2:0] AddressingControlE,
 
     input logic [31:0] ALUResultE,
-    input logic WriteDataE,
+    input logic [31:0] WriteDataE,
     input logic [4:0] RdE,
     input logic [31:0] PCPlus4E,
     
@@ -17,7 +17,7 @@ module execute_to_memory_register (
     output logic [2:0] AddressingControlM,
     
     output logic [31:0] ALUResultM,
-    output logic WriteDataM,
+    output logic [31:0] WriteDataM,
     output logic [4:0] RdM,
     output logic [31:0] PCPlus4M
 

@@ -1,8 +1,8 @@
 module decode(
     input logic        clk, 
     input logic [31:0] InstrD, //instruction to decode
-    input logic        WD3,    
-    input logic [31:0] A3,    //data from writeback stage to write into regfile
+    input logic [31:0] WD3,    
+    input logic [4:0]  A3,    //data from writeback stage to write into regfile
     input logic        WE3, 
 
     output logic [31:0] RD1, //regfile output 1
@@ -18,11 +18,10 @@ module decode(
     output logic        BranchD,
     output logic [2:0]  BranchTypeD,
     output logic [3:0]  ALUControlD,
-    output logic        AluSrcBD,
+    output logic        ALUSrcBD,
     output logic        ALUSrcAD,
     output logic [2:0]  AddressingControlD,
-    output logic [31:0] a0D,
-    output logic [2:0] ImmSrcD
+    output logic [31:0] a0D
 
 );
 
@@ -34,7 +33,7 @@ logic [19:15] A1;
 logic [24:20] A2;
 
 //Connections for extend block
-logic [1:0] ImmSrcD;
+logic [2:0] ImmSrcD;
 logic [31:7] Imm;
 
 
@@ -65,7 +64,7 @@ control control1(
     .RegWrite(RegWriteD),
     .ALUControl(ALUControlD),
     .ALUSrcA(ALUSrcAD),
-    .ALUSrcB(AluSrcBD),
+    .ALUSrcB(ALUSrcBD),
     .MemWrite(MemWriteD),
     .Branch(BranchD),
     .BranchType(BranchTypeD), 
@@ -98,7 +97,7 @@ sign_ext sign_ext1(
 .Imm(Imm),
 .ImmSrc(ImmSrcD),
 
-.ImmExt(ExtImmD)
+.ImmExt(ImmExtD)
 
 );
 

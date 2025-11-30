@@ -36,7 +36,7 @@ always_comb begin
     //tmp = (ZeroE & BranchE); // is this needed?
     //PCSrcE = (tmp | JumpE);
 
-    PCTargetE  = PCE + ExtImmE;
+    PCTargetE  = PCE + ImmExtE;
 
 end
 
@@ -46,7 +46,7 @@ mux mux2(
 
     .s(ALUSrcBE),
     .d0(WriteDataE),
-    .d1(ExtImmE),
+    .d1(ImmExtE),
     
     .y(SrcBE)
 

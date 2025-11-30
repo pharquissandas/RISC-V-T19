@@ -4,7 +4,7 @@ input logic        clk,
 input logic        MemWriteM, 
 input logic [31:0] ALUResultM,
 input logic [31:0] WriteDataM,
-input logic AddressingControlM,
+input logic [2:0]  AddressingControlM,
 
 output logic [31:0] RDM
 

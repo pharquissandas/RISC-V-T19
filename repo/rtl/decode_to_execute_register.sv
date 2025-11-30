@@ -9,7 +9,6 @@ module decode_to_execute_register(
     input logic [3:0] ALUControlD,
     input logic ALUSrcAD,
     input logic ALUSrcBD,
-    input logic [2:0] ImmSrcD,
     input logic [2:0] AddressingControlD,
     input logic [2:0] BranchTypeD,
 
@@ -30,7 +29,6 @@ module decode_to_execute_register(
     output logic [3:0] ALUControlE,
     output logic ALUSrcAE,
     output logic ALUSrcBE,
-    output logic [2:0] ImmSrcE,
     output logic [2:0] AddressingControlE,
     output logic [2:0] BranchTypeE,
 
@@ -52,7 +50,6 @@ module decode_to_execute_register(
         ALUControlE        <= ALUControlD;
         ALUSrcAE           <= ALUSrcAD;
         ALUSrcBE           <= ALUSrcBD;
-        ImmSrcE            <= ImmSrcD;
         AddressingControlE <= AddressingControlD;
         BranchTypeE        <= BranchTypeD;
 
