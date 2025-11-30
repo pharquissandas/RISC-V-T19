@@ -48,8 +48,8 @@ mux mux2(
 mux mux3(
 
     .s(ALUSrcAE),
-    .d0(PCE),
-    .d1(SrcAE),
+    .d1(PCE),
+    .d0(SrcAE),
     
     .y(SrcAEE)
 

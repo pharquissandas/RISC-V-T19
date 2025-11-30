@@ -4,14 +4,14 @@ input logic [31:0] ALUResultW,
 input logic [31:0] ReadDataW,
 input logic [31:0] PCPlus4W,
 input logic [1:0]  ResultSrcW,
-input logic [31:0] a0D,
+//input logic [31:0] a0D,
 
-output logic [31:0] ResultW,
-output logic [31:0] a0M
+output logic [31:0] ResultW
+//output logic [31:0] a0M
 
 );
 
-assign a0M = a0D;
+//assign a0M = a0D;
 
 mux3input mux3input2(
 

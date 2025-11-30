@@ -4,6 +4,7 @@ module top (
     output logic [31:0] a0
 );
 
+    assign a0 = ResultW;
     // Control signals
     logic [1:0] PCSrcE;
     /*logic       RegWrite;
@@ -88,7 +89,9 @@ module top (
 
     logic [31:0] WriteDataE;
     logic [31:0] PCPlus4E;
+    /*verilator lint_off UNUSEDSIGNAL */
     logic [31:0] a0D;
+    /*verilator lint_on UNUSEDSIGNAL */
     logic        FEN;
     logic        DEN;      
     logic        RSTE;   
@@ -279,10 +282,10 @@ module top (
         .ReadDataW(ReadDataW),
         .PCPlus4W(PCPlus4W),
         .ResultSrcW(ResultSrcW),
-        .a0D(a0D),
+        //.a0D(a0D),
 
-        .ResultW(ResultW),
-        .a0M(a0)
+        .ResultW(ResultW)
+        //.a0M(a0)
 
     );
 
