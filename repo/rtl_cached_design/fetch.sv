@@ -2,6 +2,7 @@ module fetch(
 
     input logic        clk,
     input logic        rst,
+    input logic        en,
     input logic [1:0]  PCSrcE,
     input logic [31:0] PCTargetE,
     input logic [31:0] ALUResultE,
@@ -13,31 +14,23 @@ module fetch(
 
 );
 
-assign PCF = PCCurr;
+    pc pc_inst(
+        .clk(clk),
+        .rst(rst),
+        .en(en),
+        .PCSrcE(PCSrcE),
+        .ALUResultE(ALUResultE),
+        .PCTargetE(PCTargetE),
+        .PCPlus4F(PCPlus4F),
+        .PCF(PCF)
 
-logic [31:0] PCCurr;
-
-
-pc_pipeline pc_inst(
-
-    .clk(clk),
-    .rst(rst),
-    .PCSrc(PCSrcE),
-    .ALUResult(ALUResultE),
-    .PCTarget(PCTargetE),
-    .PCPlus4(PCPlus4F),
-    .PC(PCCurr)
-
-);
+    );
 
 
-instr_mem instr_mem1(
-
-    .A(PCCurr),
-
-    .RD(InstrF)
-
-);
+    instr_mem instr_mem_inst(
+        .A(PCF),
+        .RD(InstrF)
+    );
 
 
 endmodule

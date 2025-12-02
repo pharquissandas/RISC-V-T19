@@ -1,29 +1,23 @@
-module memory(
+module memory (
+    input logic clk,
+    
+    input logic [2:0] AddressingControlM,
+    input logic MemWriteM,
 
-input logic        clk,
-input logic        rst,
-input logic        MemWriteM, 
-input logic [31:0] ALUResultM,
-input logic [31:0] WriteDataM,
-input logic [2:0]  AddressingControlM,
+    input logic [31:0] ALUResultM,
+    input logic [31:0] WriteDataM,
 
-output logic [31:0] RDM
-
-);
-
-logic stall;
-
-memory_unit data_mem1(
-
-    .clk(clk),
-    .rst(rst),
-    .WE(MemWriteM),
-    .A(ALUResultM),
-    .WD(WriteDataM),
-    .AddressingControl(AddressingControlM),
-    .RD(RDM),
-    .stall(stall)
+    output logic [31:0] ReadDataM
 
 );
+
+    data_mem data_mem_inst (
+        .A(ALUResultM),
+        .AddressingControl(AddressingControlM),
+        .clk(clk),
+        .WE(MemWriteM),
+        .WD(WriteDataM),
+        .RD(ReadDataM)
+    );
 
 endmodule

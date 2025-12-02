@@ -1,8 +1,9 @@
 module decode_to_execute_register(
 
-    input logic en,
     input logic clk,
     input logic rst,
+
+    // control signals from Control.sv
     input logic RegWriteD,
     input logic [1:0] ResultSrcD,
     input logic MemWriteD,
@@ -14,6 +15,7 @@ module decode_to_execute_register(
     input logic [2:0] AddressingControlD,
     input logic [2:0] BranchTypeD,
 
+    // data signals from reg_file.sv & instructions
     input logic [31:0] RD1D,
     input logic [31:0] RD2D,
     input logic [31:0] PCD,
@@ -68,7 +70,7 @@ module decode_to_execute_register(
             PCPlus4E    <= 32'b0;
         end
 
-        else if(en) begin
+        else begin
             RegWriteE          <= RegWriteD;
             ResultSrcE         <= ResultSrcD;
             MemWriteE          <= MemWriteD;

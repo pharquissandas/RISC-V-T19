@@ -1,28 +1,19 @@
-module writeback(
+module writeback (
+    input logic [31:0] ALUResultW,
+    input logic [31:0] ReadDataW,
+    input logic [31:0] PCPlus4W,
+    input logic [1:0] ResultSrcW,
 
-input logic [31:0] ALUResultW,
-input logic [31:0] ReadDataW,
-input logic [31:0] PCPlus4W,
-input logic [1:0]  ResultSrcW,
-//input logic [31:0] a0D,
-
-output logic [31:0] ResultW
-//output logic [31:0] a0M
-
+    output logic [31:0] ResultW
 );
 
-//assign a0M = a0D;
-
-mux3input mux3input2(
-
-    .s(ResultSrcW),
-    .d0(ALUResultW),
-    .d1(ReadDataW),
-    .d2(PCPlus4W),
-
-    .y(ResultW)
-
-);
-
+    always_comb begin
+        case (ResultSrcW)
+            2'b00: ResultW = ALUResultW;
+            2'b01: ResultW = ReadDataW;
+            2'b10: ResultW = PCPlus4W;
+            default: ResultW = ALUResultW;
+        endcase
+    end
 
 endmodule
