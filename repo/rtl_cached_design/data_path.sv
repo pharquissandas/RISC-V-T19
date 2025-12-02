@@ -18,6 +18,7 @@ module data_path (
 );
 
     logic [31:0] PC, PCPlus4, ImmExt, MemData, ALUResult, SrcA, SrcB, ReadData1, ReadData2, ResultData;
+    logic stall;
 
     assign SrcA = ALUSrcA ? PC : ReadData1;
     assign SrcB = ALUSrcB ? ImmExt : ReadData2;
@@ -52,7 +53,8 @@ module data_path (
         .A(ALUResult),
         .WD(ReadData2),
         .AddressingControl(AddressingControl),
-        .RD(MemData)
+        .RD(MemData),
+        .stall(stall)
     );
 
     reg_file reg_file_inst(

@@ -11,6 +11,8 @@ output logic [31:0] RDM
 
 );
 
+logic stall;
+
 memory_unit data_mem1(
 
     .clk(clk),
@@ -19,7 +21,8 @@ memory_unit data_mem1(
     .A(ALUResultM),
     .WD(WriteDataM),
     .AddressingControl(AddressingControlM),
-    .RD(RDM)
+    .RD(RDM),
+    .stall(stall)
 
 );
 

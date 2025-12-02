@@ -7,13 +7,17 @@ module memory_unit #(
     input  logic [XLEN-1:0] A,
     input  logic [XLEN-1:0] WD,
     input  logic [2:0] AddressingControl,
-    output logic [XLEN-1:0] RD
+    output logic [XLEN-1:0] RD,
+    output logic stall
 );
 
 logic [31:0] ram_out;
-logic [31:0] cache_out; // The 32-bit word from cache
+logic [31:0] ram_in;
+logic [31:0] ram_addr;   
+logic        wr_en; 
+logic [31:0] cache_out;
+logic [1:0]  byte_offset;
 
-logic [1:0] byte_offset;
 assign byte_offset = A[1:0];
 
 always_comb begin
@@ -54,9 +58,9 @@ end
 
 data_mem data_mem_inst (
     .clk(clk),
-    .WE(WE),
-    .A(A),
-    .WD(WD),
+    .WE(wr_en),
+    .A(ram_addr),
+    .WD(ram_in),
     .AddressingControl(AddressingControl),
     .RD(ram_out)
 );
@@ -68,8 +72,12 @@ data_cache data_cache_inst (
     .WD(WD),
     .WE(WE),
     .AddressingControl(AddressingControl),
-    .mem_rd_data(ram_out), // Pass RAM data to cache for refills
-    .cache_dout(cache_out)
+    .mem_rd(ram_out),
+    .cache_dout(cache_out),
+    .mem_wd(ram_in),
+    .mem_addr(ram_addr),
+    .wr_en(wr_en),
+    .stall(stall)
 );
 
 endmodule
