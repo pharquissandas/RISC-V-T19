@@ -17,6 +17,7 @@ module memory_to_writeback_register(
     output logic [4:0] RdW,
     output logic [31:0] PCPlus4W
 );
+
     always_ff @(posedge clk) begin
         RegWriteW    <= RegWriteM;
         ResultSrcW   <= ResultSrcM;

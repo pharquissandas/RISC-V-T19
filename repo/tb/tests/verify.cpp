@@ -5,6 +5,14 @@
 
 #define CYCLES 10000
 
+// TEST_F(CpuTestbench, Test)
+// {
+//     setupTest("test");
+//     initSimulation();
+//     runSimulation(CYCLES);
+//     EXPECT_EQ(top_->a0, 1);
+// }
+
 TEST_F(CpuTestbench, TestAddiBne)
 {
     setupTest("1_addi_bne");

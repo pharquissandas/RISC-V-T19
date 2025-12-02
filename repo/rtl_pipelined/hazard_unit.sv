@@ -25,9 +25,6 @@ module hazard_unit(
 
 
 always_comb begin
-
-    ForwardAE = 2'b00; //default is no forwarding
-    ForwardBE = 2'b00; //default is no forwarding
     ForwardAE     = 2'b00;
     ForwardBE     = 2'b00;
     StallDecode   = 1'b0;
@@ -50,7 +47,7 @@ always_comb begin
         ForwardBE = 2'b01;
 
     // Load-use hazard
-    if (ResultSrcE == 2'b01 && (RdE == Rs1D || RdE == Rs2D)) begin
+    if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
         StallDecode = 1'b1;
         StallFetch = 1'b1;
     end

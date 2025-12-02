@@ -6,7 +6,7 @@
 # Constants
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 TEST_FOLDER=$(realpath "$SCRIPT_DIR/tests")
-RTL_FOLDER=$(realpath "$SCRIPT_DIR/../pipelined") #<-- change file path for different designs
+RTL_FOLDER=$(realpath "$SCRIPT_DIR/../rtl") #<-- change file path for different designs
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
 RESET=$(tput sgr0)

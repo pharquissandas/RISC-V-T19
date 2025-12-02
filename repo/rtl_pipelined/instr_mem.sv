@@ -1,8 +1,6 @@
 module instr_mem (
-    /* verilator lint_off UNUSED */
     input logic [31:0] A,
     output logic [31:0] RD
-    /* verilator lint_on UNUSED */
 );
 
     // instruction memory array: 4096 words of 32 bits each

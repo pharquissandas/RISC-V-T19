@@ -2,6 +2,7 @@ module fetch_to_decode_register(
 
     input logic clk,
     input logic en,
+    input logic rst,
     input logic [31:0] PCF,
     input logic [31:0] PCPlus4F,
     input logic [31:0] InstrF,
@@ -13,11 +14,15 @@ module fetch_to_decode_register(
 );
 
     always_ff @(posedge clk) begin
-        if(en) begin
-            PCD      <= PCF;
+        if (rst) begin
+            PCD <= 32'b0;
+            PCPlus4D <= 32'b0;
+            InstrD <= 32'b0;
+        end
+        else if (en) begin
+            PCD <= PCF;
             PCPlus4D <= PCPlus4F;
-            InstrD   <= InstrF;
+            InstrD <= InstrF;
         end
     end
-//fine to have no else? I think so
 endmodule

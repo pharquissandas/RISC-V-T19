@@ -1,0 +1,39 @@
+module execute_to_memory_register (
+
+    input logic clk,
+
+    input logic RegWriteE,
+    input logic [1:0] ResultSrcE,
+    input logic MemWriteE,
+    input logic [2:0] AddressingControlE,
+
+    input logic [31:0] ALUResultE,
+    input logic [31:0] WriteDataE,
+    input logic [4:0] RdE,
+    input logic [31:0] PCPlus4E,
+    
+    output logic RegWriteM,
+    output logic [1:0] ResultSrcM,
+    output logic MemWriteM,
+    output logic [2:0] AddressingControlM,
+    
+    output logic [31:0] ALUResultM,
+    output logic [31:0] WriteDataM,
+    output logic [4:0] RdM,
+    output logic [31:0] PCPlus4M
+
+);
+    always_ff @(posedge clk) begin
+        RegWriteM          <= RegWriteE;
+        ResultSrcM         <= ResultSrcE;
+        MemWriteM          <= MemWriteE;
+        AddressingControlM <= AddressingControlE;
+
+        ALUResultM   <= ALUResultE;
+        WriteDataM   <= WriteDataE;
+        RdM          <= RdE;
+        PCPlus4M     <= PCPlus4E;
+        
+    end
+
+endmodule

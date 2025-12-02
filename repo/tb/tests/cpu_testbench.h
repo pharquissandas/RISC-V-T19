@@ -22,6 +22,7 @@ public:
     void setupTest(const std::string &name)
     {
         name_ = name;
+        std::ignore = system(("mkdir -p test_out/" + name_).c_str());
         // Assemble the program
         std::ignore = system(("./assemble.sh asm/" + name_ + ".s").c_str());
         // Create default empty file for data memory

@@ -67,7 +67,6 @@ module control(
                 ALUSrcB = 1'b1;
                 ResultSrc = 2'b01;
                 ImmSrc = 3'b000;
-                ALUControl = 4'b0000;
                 AddressingControl = funct3;
             end
             // Store (S-type)
@@ -84,9 +83,9 @@ module control(
                 ImmSrc = 3'b010;
                 BranchType = funct3;
                 case(funct3)
-                    3'b000,3'b001: ALUControl = 4'b0001; // BEQ/BNE
-                    3'b100,3'b101: ALUControl = 4'b1000; // BLT/BGE
-                    3'b110,3'b111: ALUControl = 4'b1001; // BLTU/BGEU
+                    3'b000, 3'b001: ALUControl = 4'b0001; // BEQ/BNE
+                    3'b100, 3'b101: ALUControl = 4'b1000; // BLT/BGE
+                    3'b110, 3'b111: ALUControl = 4'b1001; // BLTU/BGEU
                 endcase
             end
             // JAL
