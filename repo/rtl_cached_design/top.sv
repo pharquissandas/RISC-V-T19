@@ -120,6 +120,7 @@ module top (
         // clock & reset
         .clk              (clk),
         .rst              (FlushExecute),
+        .en               (~StallExecute),
 
         // control signals from Control.sv
         .RegWriteD        (RegWriteD),
@@ -213,6 +214,7 @@ module top (
     execute_to_memory_register execute_to_memory_register_inst (
         // clock
         .clk               (clk),
+        .en                (~StallMemory),
 
         // inputs from Execute stage
         .RegWriteE         (RegWriteE),
@@ -240,11 +242,12 @@ module top (
 // Memory
 
     logic [31:0] ReadDataM;
+    logic CacheStall;
 
     memory memory_inst (
-        // clock
+        // clock & rst
         .clk              (clk),
-
+        .rst              (rst),
         // inputs from Execute-to-Memory register
         .AddressingControlM (AddressingControlM),
         .MemWriteM          (MemWriteM),
@@ -252,6 +255,7 @@ module top (
         .ALUResultM         (ALUResultM),
         .WriteDataM         (WriteDataM),
 
+        .CacheStall         (CacheStall),
         // outputs to Memory-to-Writeback register
         .ReadDataM          (ReadDataM)
     );
@@ -269,6 +273,7 @@ module top (
     memory_to_writeback_register memory_to_writeback_register_inst (
         // clock
         .clk        (clk),
+        .rst        (FlushWriteback),
 
         // inputs from Memory stage
         .RegWriteM  (RegWriteM),
@@ -308,8 +313,11 @@ module top (
 
     logic StallDecode;
     logic StallFetch;
+    logic StallExecute;
+    logic StallMemory;
     logic FlushExecute;
     logic FlushDecode;
+    logic FlushWriteback;
 
     hazard_unit hazard_unit_inst (
         // inputs from Decode & Execute stage
@@ -325,15 +333,18 @@ module top (
 
         .ResultSrcE  (ResultSrcE),
         .PCSrcE      (PCSrcE),
-
+        .CacheStall  (CacheStall),
         // outputs to control forwarding & stalling
         .ForwardAE   (ForwardAE),
         .ForwardBE   (ForwardBE),
 
         .StallDecode (StallDecode),
         .StallFetch  (StallFetch),
+        .StallExecute(StallExecute),
+        .StallMemory (StallMemory),
         .FlushExecute(FlushExecute),
-        .FlushDecode (FlushDecode)
+        .FlushDecode (FlushDecode),
+        .FlushWriteback (FlushWriteback)
     );
 
 

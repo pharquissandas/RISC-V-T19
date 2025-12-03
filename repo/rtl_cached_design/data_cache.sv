@@ -126,7 +126,7 @@ always_ff @(posedge clk) begin
             stalling1   <= 0; // stop stalling
         end
         // write: on a hit write to cache and set dirty bit true
-        if (WE) begin
+        else if (WE) begin
 
             // base result is the current cache line data for the hit way
             if (hit0) result = data_way0[set];

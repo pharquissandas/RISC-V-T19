@@ -12,14 +12,18 @@ module hazard_unit(
     
     input logic [1:0] ResultSrcE, //to identify load instructions in execute stage
     input logic [1:0] PCSrcE, //to identify control hazards in execute stage
+    input logic CacheStall,
 
     output logic [1:0] ForwardAE, //these are select inputs for muxes, 00 means no forwarding, 01 means forwarding of result in writeback stage, 10 means forwarding of result from ALU in memory stage
     output logic [1:0] ForwardBE,  //these are select inputs for muxes
 
     output logic StallDecode,
     output logic StallFetch,
+    output logic StallExecute,
+    output logic StallMemory,
     output logic FlushExecute,
-    output logic FlushDecode
+    output logic FlushDecode,
+    output logic FlushWriteback
 
 );
 
@@ -29,8 +33,11 @@ always_comb begin
     ForwardBE     = 2'b00;
     StallDecode   = 1'b0;
     StallFetch    = 1'b0;
+    StallExecute  = 1'b0;
+    StallMemory   = 1'b0;
     FlushExecute  = 1'b0;
     FlushDecode   = 1'b0;
+    FlushWriteback= 1'b0;
 
     if(Rs1E == 5'b0) // register x0 is never forwarded
         ForwardAE = 2'b00;
@@ -46,25 +53,29 @@ always_comb begin
     else if((Rs2E == RdW) && RegWriteW && Rs2E != 0)
         ForwardBE = 2'b01;
 
+    // ------stall logic------
+    // cache stall
+    if (CacheStall) begin
+        StallFetch     = 1;
+        StallDecode    = 1;
+        StallExecute   = 1;
+        StallMemory    = 1;
+        FlushWriteback = 1;
+        // freeze whole cpu
+    end
     // Load-use hazard
-    if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
+    else if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
         StallDecode = 1'b1;
         StallFetch = 1'b1;
+        FlushExecute = 1;
     end
-    else begin
-        StallDecode = 1'b0;
-        StallFetch = 1'b0;
+    // control hazard (branch taken)
+    else if (PCSrcE != 2'b00) begin
+        FlushDecode = 1;
+        FlushExecute = 1;
     end
-
-    FlushExecute = StallDecode | (PCSrcE != 2'b00); // flush execute stage on load-use hazard or control hazard
-
-    FlushDecode = (PCSrcE != 2'b00); // flush decode stage on control hazard
 
 end
-
-
-
-
 
 
 endmodule

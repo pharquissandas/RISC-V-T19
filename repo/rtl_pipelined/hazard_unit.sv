@@ -50,15 +50,13 @@ always_comb begin
     if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
         StallDecode = 1'b1;
         StallFetch = 1'b1;
+        FlushExecute = 1;
     end
-    else begin
-        StallDecode = 1'b0;
-        StallFetch = 1'b0;
+    // control hazard
+    else if (PCSrcE != 2'b00) begin
+        FlushDecode = 1;
+        FlushExecute = 1;
     end
-
-    FlushExecute = StallDecode | (PCSrcE != 2'b00); // flush execute stage on load-use hazard or control hazard
-
-    FlushDecode = (PCSrcE != 2'b00); // flush decode stage on control hazard
 
 end
 

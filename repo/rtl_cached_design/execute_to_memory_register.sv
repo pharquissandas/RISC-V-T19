@@ -1,6 +1,7 @@
 module execute_to_memory_register (
 
     input logic clk,
+    input logic en,
 
     input logic RegWriteE,
     input logic [1:0] ResultSrcE,
@@ -24,16 +25,17 @@ module execute_to_memory_register (
 
 );
     always_ff @(posedge clk) begin
-        RegWriteM          <= RegWriteE;
-        ResultSrcM         <= ResultSrcE;
-        MemWriteM          <= MemWriteE;
-        AddressingControlM <= AddressingControlE;
+        if (en) begin
+            RegWriteM          <= RegWriteE;
+            ResultSrcM         <= ResultSrcE;
+            MemWriteM          <= MemWriteE;
+            AddressingControlM <= AddressingControlE;
 
-        ALUResultM   <= ALUResultE;
-        WriteDataM   <= WriteDataE;
-        RdM          <= RdE;
-        PCPlus4M     <= PCPlus4E;
-        
+            ALUResultM   <= ALUResultE;
+            WriteDataM   <= WriteDataE;
+            RdM          <= RdE;
+            PCPlus4M     <= PCPlus4E;
+        end
     end
 
 endmodule

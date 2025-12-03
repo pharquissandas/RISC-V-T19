@@ -2,6 +2,7 @@ module decode_to_execute_register(
 
     input logic clk,
     input logic rst,
+    input logic en,
 
     // control signals from Control.sv
     input logic RegWriteD,
@@ -70,7 +71,7 @@ module decode_to_execute_register(
             PCPlus4E    <= 32'b0;
         end
 
-        else begin
+        else if (en) begin
             RegWriteE          <= RegWriteD;
             ResultSrcE         <= ResultSrcD;
             MemWriteE          <= MemWriteD;

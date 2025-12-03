@@ -61,7 +61,6 @@ data_mem data_mem_inst (
     .WE(wr_en),
     .A(ram_addr),
     .WD(ram_in),
-    .AddressingControl(AddressingControl),
     .RD(ram_out)
 );
 
