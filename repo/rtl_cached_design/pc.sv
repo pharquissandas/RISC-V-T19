@@ -6,12 +6,15 @@ module pc #(
     input  logic                en,     // enable signal
     input  logic [1:0]          PCSrcE,  // control the source for the next PC value (00 = PC+4, 01 = PC + imm(branch/jal), 10 = ALUResult (jalr))
 
+    input logic pc_redirect_i,
+    input logic [WIDTH-1:0]   mispredict_target_pc_i,
+
+    input logic pc_predict_redirect_i,
+    input logic [WIDTH-1:0]   predicted_target_pc_i,
+
     input  logic [WIDTH-1:0]    PCTargetE,
-            
-    /* verilator lint_off UNUSED */
-
+    /* verilator lint_on UNUSED */
     input  logic [WIDTH-1:0]    ALUResultE,
-
     /* verilator lint_on UNUSED */
     output logic [WIDTH-1:0]    PCPlus4F, // PC + 4
     output logic [WIDTH-1:0]    PCF      // current program counter
@@ -19,9 +22,6 @@ module pc #(
 
 // next PC after the mux
 logic [WIDTH-1:0] PCNext;
-
-// logic [WIDTH-1:0] PCTarget;
-
 
 always_comb begin
     PCPlus4F = PCF + 4;
@@ -36,12 +36,12 @@ always_comb begin
     endcase
 end
 
-
-
 // program counter register with asynchronous reset
 always_ff @(posedge clk) begin
     if (rst) PCF <= {WIDTH{1'b0}};      // Reset PC to 0
+    else if (pc_redirect_i) PCF <= mispredict_target_pc_i; // Misprediction redirect
+    else if (pc_predict_redirect_i) PCF <= predicted_target_pc_i; // Branch prediction redirect
     else if (en) PCF <= PCNext;            // Update PC normally
 end
-
 endmodule
+

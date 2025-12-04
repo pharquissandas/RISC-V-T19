@@ -14,6 +14,8 @@ module hazard_unit(
     input logic [1:0] PCSrcE, //to identify control hazards in execute stage
     input logic CacheStall,
 
+    input logic branch_mispredict_i,
+
     output logic [1:0] ForwardAE, //these are select inputs for muxes, 00 means no forwarding, 01 means forwarding of result in writeback stage, 10 means forwarding of result from ALU in memory stage
     output logic [1:0] ForwardBE,  //these are select inputs for muxes
 
@@ -23,10 +25,10 @@ module hazard_unit(
     output logic StallMemory,
     output logic FlushExecute,
     output logic FlushDecode,
-    output logic FlushWriteback
-
+    output logic FlushWriteback,
+    
+    output logic pc_redirect_o,
 );
-
 
 always_comb begin
     ForwardAE     = 2'b00;
@@ -56,26 +58,33 @@ always_comb begin
     // ------stall logic------
     // cache stall
     if (CacheStall) begin
-        StallFetch     = 1;
-        StallDecode    = 1;
-        StallExecute   = 1;
-        StallMemory    = 1;
-        FlushWriteback = 1;
+        StallFetch     = 1'b1;
+        StallDecode    = 1'b1;
+        StallExecute   = 1'b1;
+        StallMemory    = 1'b1;
+        FlushWriteback = 1'b1;
         // freeze whole cpu
     end
-    // Load-use hazard
+
+    // misprediction correction (highest priority control hazard)
+    else if (branch_mispredict_i) begin
+        pc_redirect_o  = 1'b1;
+        FlushDecode    = 1'b1;
+        FlushExecute   = 1'b1;
+    end
+
+    // unconditional jump control hazard (branch taken)
+    else if (PCSrcE != 2'b00) begin
+        FlushDecode = 1'b1;
+        FlushExecute = 1'b1;
+        pc_redirect_o = 1'b1;
+    end
+
+    // load-use hazard (data hazard)
     else if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
         StallDecode = 1'b1;
         StallFetch = 1'b1;
-        FlushExecute = 1;
+        FlushExecute = 1'b1;
     end
-    // control hazard (branch taken)
-    else if (PCSrcE != 2'b00) begin
-        FlushDecode = 1;
-        FlushExecute = 1;
-    end
-
 end
-
-
 endmodule

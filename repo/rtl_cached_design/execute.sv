@@ -1,11 +1,12 @@
 module execute(
-
     input logic [1:0]  JumpE,
     input logic        BranchE,
     input logic [3:0]  ALUControlE,
     input logic        ALUSrcAE,
     input logic        ALUSrcBE,
     input logic [2:0]  BranchTypeE,
+
+    input logic predict_taken_i,
 
     input logic [31:0] ResultW,
     input logic [31:0] ALUResultM,
@@ -21,8 +22,12 @@ module execute(
     output logic [31:0] WriteDataE,
     output logic [1:0]  PCSrcE,
     output logic [31:0] ALUResultE,
-    output logic [31:0] PCTargetE
+    output logic [31:0] PCTargetE,
 
+    output logic branch_mispredict_o,
+    output logic execute_is_branch_o,
+    output logic execute_branch_taken_o,
+    output logic [31:0] mispredict_target_pc_o
 );
 
     logic ZeroE;
@@ -30,8 +35,6 @@ module execute(
     logic [31:0] SrcBE, SrcAE;
 
     always_comb begin
-
-
         case (ForwardAE)
             2'b00: SrcA = RD1E;
             2'b01: SrcA = ResultW;
@@ -69,4 +72,28 @@ module execute(
         .PCSrc (PCSrcE)
     );
 
+    // branch prediction and bht update signals
+    assign execute_is_branch_o = BranchE && (JumpE == 2'b00);
+    assign execute_branch_taken_o = execute_is_branch_o && (PCSrcE == 2'b01);
+
+    // misprediction detection
+    always_comb begin
+        branch_mispredict_o = 1'b0;
+        mispredict_target_pc_o = 32'b0; 
+
+        // only check for misprediction on conditional branches
+        if (execute_is_branch_o) begin
+            // check if actual outcome differs from predicted outcome
+            if (execute_branch_taken_o != predict_taken_i) begin
+                branch_mispredict_o = 1'b1;
+                // determine correct target PC
+                if (execute_branch_taken_o) begin
+                    mispredict_target_pc_o = PCTargetE; // branch taken
+                end
+                else begin
+                    mispredict_target_pc_o = PCE + 4; // branch not taken
+                end
+            end
+        end
+    end
 endmodule

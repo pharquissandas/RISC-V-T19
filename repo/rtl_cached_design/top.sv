@@ -1,16 +1,36 @@
 module top (
     input logic clk,
     input logic rst,
-    
     output logic [31:0] a0
 );
+    logic predict_taken_F;
+    logic predict_taken_D;
+    logic pc_predict_redirect_D;
+    logic [31:0] predicted_target_pc_D;
+    logic branch_mispredict_E;
+    logic execute_is_branch_E;
+    logic execute_branch_taken_E;
+    logic [31:0] mispredict_target_pc_E;
+    logic pc_redirect_H;
 
-// Fetch
+    logic predict_taken_E;
 
     logic [31:0] InstrF;
     logic [31:0] PCF;
     logic [31:0] PCPlus4F;
 
+// Branch Predictor
+    branch_predictor bht_inst (
+        .clk(clk),
+        .rst(rst),
+        .fetch_pc_i(PCF),
+        .predict_taken_o(predict_taken_F),
+        .execute_pc_i(PCE),
+        .execute_is_branch_i(execute_is_branch_E),
+        .execute_branch_taken_i(execute_branch_taken_E)
+    );
+
+// Fetch
     fetch fetch_inst (
         .clk(clk),
         .rst(rst),
@@ -18,14 +38,18 @@ module top (
         .PCSrcE(PCSrcE),
         .PCTargetE(PCTargetE),
         .ALUResultE(ALUResultE),
+
+        .pc_redirect_i(pc_redirect_H),
+        .mispredict_target_pc_i(mispredict_target_pc_E),
+        .pc_predict_redirect_i(pc_predict_redirect_D),
+        .predicted_target_pc_i(predicted_target_pc_D),
         
         .InstrF(InstrF),
         .PCF(PCF),
         .PCPlus4F(PCPlus4F)
     );
 
-// F2D
-    
+// Fetch to Decode Register
     logic [31:0] PCD;
     logic [31:0] PCPlus4D;
     logic [31:0] InstrD;
@@ -37,14 +61,15 @@ module top (
         .PCF(PCF),
         .PCPlus4F(PCPlus4F),
         .InstrF(InstrF),
+        .predict_taken_F(predict_taken_F),
 
         .PCD(PCD),
         .PCPlus4D(PCPlus4D),
         .InstrD(InstrD)
+        .predict_taken_D(predict_taken_D)
     );
 
 // Decode
-
     logic [31:0] RD1D; //regfile output 1
     logic [31:0] RD2D; //regfile output 2
     logic [31:0] ImmExtD;
@@ -62,11 +87,7 @@ module top (
     logic [3:0]  ALUControlD;
     logic        ALUSrcBD;
     logic        ALUSrcAD;
-    logic [2:0]  AddressingControlD;
-
-
-
-    
+    logic [2:0]  AddressingControlD; 
 
     decode decode_inst (
         .clk(clk),
@@ -74,6 +95,9 @@ module top (
         .ResultW(ResultW),
         .RdW(RdW),
         .RegWriteW(RegWriteW),
+
+        .PCD(PCD),
+        .predict_taken_D(predict_taken_D),
 
         .RD1D(RD1D),
         .RD2D(RD2D),
@@ -91,11 +115,13 @@ module top (
         .ALUSrcAD(ALUSrcAD),
         .ALUSrcBD(ALUSrcBD),
         .AddressingControlD(AddressingControlD),
-        .a0(a0)
+        .a0(a0),
+
+        .pc_predict_redirect_D(pc_predict_redirect_D),
+        .predicted_target_pc_D(predicted_target_pc_D)
     );
 
-// D2E
-
+// Decode to Execute Register
     logic RegWriteE;
     logic [1:0] ResultSrcE;
     logic MemWriteE;
@@ -134,6 +160,8 @@ module top (
         .AddressingControlD(AddressingControlD),
         .BranchTypeD      (BranchTypeD),
 
+        .predict_taken_D(predict_taken_D),
+
         // data signals from reg_file.sv & instructions
         .RD1D             (RD1D),
         .RD2D             (RD2D),
@@ -156,6 +184,8 @@ module top (
         .AddressingControlE(AddressingControlE),
         .BranchTypeE      (BranchTypeE),
 
+        .predict_taken_E(predict_taken_E),
+
         .RD1E             (RD1E),
         .RD2E             (RD2E),
         .PCE              (PCE),
@@ -167,7 +197,6 @@ module top (
     );
 
 // Execute
-
     logic [31:0] WriteDataE;
     logic [1:0]  PCSrcE;
     logic [31:0] ALUResultE;
@@ -181,6 +210,8 @@ module top (
         .ALUSrcAE     (ALUSrcAE),
         .ALUSrcBE     (ALUSrcBE),
         .BranchTypeE  (BranchTypeE),
+
+        .predict_taken_i(predict_taken_E),
 
         // data signals
         .ResultW(ResultW),
@@ -197,10 +228,14 @@ module top (
         .PCSrcE       (PCSrcE),
         .ALUResultE   (ALUResultE),
         .PCTargetE    (PCTargetE)
+
+        .branch_mispredict_o(branch_mispredict_E),
+        .execute_is_branch_o(execute_is_branch_E),
+        .execute_branch_taken_o(execute_branch_taken_E),
+        .mispredict_target_pc_o(mispredict_target_pc_E)
     );
 
-// E2M
-
+// Execute to Memory Register
     logic RegWriteM;
     logic [1:0] ResultSrcM;
     logic MemWriteM;
@@ -240,7 +275,6 @@ module top (
     );
 
 // Memory
-
     logic [31:0] ReadDataM;
     logic CacheStall;
 
@@ -260,8 +294,7 @@ module top (
         .ReadDataM          (ReadDataM)
     );
 
-// M2W
-
+// Memory to WriteBack Register
     logic RegWriteW;
     logic [1:0] ResultSrcW;
 
@@ -295,7 +328,6 @@ module top (
     );
 
 // WriteBack
-
     logic [31:0] ResultW;
 
     writeback writeback_inst (
@@ -307,7 +339,6 @@ module top (
     );
 
 // Hazard Unit
-
     logic [1:0] ForwardAE; //these are select inputs for muxes, 00 means no forwarding, 01 means forwarding of result in writeback stage, 10 means forwarding of result from ALU in memory stage
     logic [1:0] ForwardBE;  //these are select inputs for muxes
 
@@ -334,6 +365,9 @@ module top (
         .ResultSrcE  (ResultSrcE),
         .PCSrcE      (PCSrcE),
         .CacheStall  (CacheStall),
+
+        .branch_mispredict_i(branch_mispredict_E),
+
         // outputs to control forwarding & stalling
         .ForwardAE   (ForwardAE),
         .ForwardBE   (ForwardBE),
@@ -344,9 +378,8 @@ module top (
         .StallMemory (StallMemory),
         .FlushExecute(FlushExecute),
         .FlushDecode (FlushDecode),
-        .FlushWriteback (FlushWriteback)
+        .FlushWriteback (FlushWriteback),
+
+        .pc_redirect_o(pc_redirect_H)
     );
-
-
-
 endmodule

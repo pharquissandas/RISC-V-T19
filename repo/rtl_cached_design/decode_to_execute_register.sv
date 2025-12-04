@@ -1,5 +1,4 @@
 module decode_to_execute_register(
-
     input logic clk,
     input logic rst,
     input logic en,
@@ -15,6 +14,8 @@ module decode_to_execute_register(
     input logic ALUSrcBD,
     input logic [2:0] AddressingControlD,
     input logic [2:0] BranchTypeD,
+
+    input logic predict_taken_D,
 
     // data signals from reg_file.sv & instructions
     input logic [31:0] RD1D,
@@ -36,6 +37,8 @@ module decode_to_execute_register(
     output logic ALUSrcBE,
     output logic [2:0] AddressingControlE,
     output logic [2:0] BranchTypeE,
+
+    output logic predict_taken_E,
 
     output logic [31:0] RD1E,
     output logic [31:0] RD2E,
@@ -60,6 +63,7 @@ module decode_to_execute_register(
             ALUSrcBE           <= 1'b0;
             AddressingControlE <= 3'b000;
             BranchTypeE        <= 3'b000;
+            predict_taken_E <= 1'b0;
 
             RD1E        <= 32'b0;
             RD2E        <= 32'b0;
@@ -82,6 +86,7 @@ module decode_to_execute_register(
             ALUSrcBE           <= ALUSrcBD;
             AddressingControlE <= AddressingControlD;
             BranchTypeE        <= BranchTypeD;
+            predict_taken_E <= predict_taken_D;
 
             RD1E        <= RD1D;
             RD2E        <= RD2D;
