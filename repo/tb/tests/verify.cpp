@@ -5,53 +5,82 @@
 
 #define CYCLES 10000
 
-// TEST_F(CpuTestbench, Test)
-// {
-//     setupTest("test");
-//     initSimulation();
-//     runSimulation(CYCLES);
-//     EXPECT_EQ(top_->a0, 1);
-// }
-
-TEST_F(CpuTestbench, TestAddiBne)
-{
+TEST_F(CpuTestbench, TestAddiBne){
     setupTest("1_addi_bne");
     initSimulation();
     runSimulation(CYCLES);
     EXPECT_EQ(top_->a0, 254);
 }
 
-TEST_F(CpuTestbench, TestLiAdd)
-{
+TEST_F(CpuTestbench, TestLiAdd){
     setupTest("2_li_add");
     initSimulation();
     runSimulation(CYCLES);
     EXPECT_EQ(top_->a0, 1000);
 }
 
-TEST_F(CpuTestbench, TestLbuSb)
-{
+TEST_F(CpuTestbench, TestLbuSb){
     setupTest("3_lbu_sb");
     initSimulation();
     runSimulation(CYCLES);
     EXPECT_EQ(top_->a0, 300);
 }
 
-TEST_F(CpuTestbench, TestJalRet)
-{
+TEST_F(CpuTestbench, TestJalRet){
     setupTest("4_jal_ret");
     initSimulation();
     runSimulation(CYCLES);
     EXPECT_EQ(top_->a0, 53);
 }
 
-TEST_F(CpuTestbench, TestPdf)
-{
+TEST_F(CpuTestbench, TestPdf){
     setupTest("5_pdf");
     setData("reference/gaussian.mem");
     initSimulation();
     runSimulation(CYCLES * 100);
     EXPECT_EQ(top_->a0, 15363);
+}
+
+TEST_F(CpuTestbench, TestDataHazard){
+    setupTest("6_data_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 0x10);
+}
+
+TEST_F(CpuTestbench, TestDataLoadHazard){
+    setupTest("7_load_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 0x6);
+}
+
+TEST_F(CpuTestbench, TestBranchHazard){
+    setupTest("8_branch_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 10);
+}
+
+TEST_F(CpuTestbench, TestWAWHazard){
+    setupTest("9_waw_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 0);
+}
+
+TEST_F(CpuTestbench, TestRawHazard){
+    setupTest("10_raw_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 30);
+}
+
+TEST_F(CpuTestbench, TestStoreLoadHazard){
+    setupTest("11_store_load_hazard");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 354);
 }
 
 // /* Instruction Coverage */ 

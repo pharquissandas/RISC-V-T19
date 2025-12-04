@@ -6,3 +6,4 @@ main:
     and x5, x4, x2    # x5=x4&x2=1010 (RAW hazard on x4,x2)
     or x6, x5, x3     # x6=x5|x3=1111 (RAW hazard on x5,x3)
     addi a0, x6, 1    # a0=x6+1 (RAW hazard on x6)
+
