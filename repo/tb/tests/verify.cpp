@@ -104,6 +104,20 @@ TEST_F(CpuTestbench, TestCache2){
     EXPECT_EQ(top_->a0, 0x87654321);
 }
 
+TEST_F(CpuTestbench, TestCacheEviction){
+    setupTest("14_cache_eviction");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 0xAA);
+}
+
+TEST_F(CpuTestbench, TestCacheReadEviction){
+    setupTest("15_cache_read_eviction");
+    initSimulation();
+    runSimulation(CYCLES);
+    EXPECT_EQ(top_->a0, 0xAA);
+}
+
 // /* Instruction Coverage */ 
 
 // Upper and Jump/Link Instructions

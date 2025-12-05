@@ -91,12 +91,7 @@ always_comb begin
     end
 
     else if (!hit) begin // miss
-        if (u_bit[set] == 1 && d_way0[set] && v_way0[set]) begin
-            stall = 1; // way 0 is dirty: preemtively stall
-        end
-        else if (u_bit[set] == 0 && d_way1[set] && v_way1[set]) begin
-            stall = 1; // way 1 dirty: preemtively stall
-        end
+        stall = 1;
     end
 end
 
@@ -125,6 +120,38 @@ always_ff @(posedge clk) begin
             d_way1[set] <= 0;
             stalling1   <= 0; // stop stalling
         end
+
+        // on miss, bring data from ram to cache and update memory from cache if eviction
+        else if (!hit) begin
+            
+            if (u_bit[set] == 1) begin // 1 most recently used so load into 0                
+
+                if(d_way0[set] == 1 && !stalling0) begin // if dirty, start stalling
+                    stalling0 <= 1;
+                end
+                else begin // else if clean, or if stalling = 1: already stalled
+                    data_way0[set] <= mem_rd;
+                    tag_way0[set]  <= tag;
+                    v_way0[set] <= 1;
+                    d_way0[set] <= 0;
+                    u_bit[set]  <= 0; // way 0 most recently used
+                end
+            end
+            else begin // 0 most recently used so load into 1
+
+                if(d_way1[set] == 1 && !stalling1) begin // if dirty, start stalling
+                    stalling1 <= 1;
+                end
+                else begin
+                    data_way1[set] <= mem_rd;
+                    tag_way1[set]  <= tag;
+                    v_way1[set] <= 1;
+                    d_way1[set] <= 0;
+                    u_bit[set]  <= 1; // way 1 most recently used
+                end
+            end
+        end
+        
         // write: on a hit write to cache and set dirty bit true
         else if (WE) begin
 
@@ -163,35 +190,7 @@ always_ff @(posedge clk) begin
                 d_way1[set] <= 1;
             end
         end
-        // on miss, bring data from ram to cache and update memory from cache if eviction
-        else if (!hit) begin
-            if (u_bit[set] == 1) begin // 1 most recently used so load into 0                
 
-                if(d_way0[set] == 1 && !stalling0) begin // if dirty, start stalling
-                    stalling0 <= 1;
-                end
-                else begin // else if clean, or if stalling = 1: already stalled
-                    data_way0[set] <= mem_rd;
-                    tag_way0[set]  <= tag;
-                    v_way0[set] <= 1;
-                    d_way0[set] <= 0;
-                    u_bit[set]  <= 0; // way 0 most recently used
-                end
-            end
-            else begin // 0 most recently used so load into 1
-
-                if(d_way1[set] == 1 && !stalling1) begin // if dirty, start stalling
-                    stalling1 <= 1;
-                end
-                else begin
-                    data_way1[set] <= mem_rd;
-                    tag_way1[set]  <= tag;
-                    v_way1[set] <= 1;
-                    d_way1[set] <= 0;
-                    u_bit[set]  <= 1; // way 1 most recently used
-                end
-            end
-        end
         else if (hit && !WE) begin // read hit: update
             if (hit0) u_bit[set] <= 0;
             if (hit1) u_bit[set] <= 1;

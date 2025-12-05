@@ -23,6 +23,7 @@ module hazard_unit(
     output logic StallFetch,
     output logic StallExecute,
     output logic StallMemory,
+    output logic StallWriteback,
     output logic FlushExecute,
     output logic FlushDecode,
     output logic FlushWriteback,
@@ -37,6 +38,7 @@ always_comb begin
     StallFetch    = 1'b0;
     StallExecute  = 1'b0;
     StallMemory   = 1'b0;
+    StallWriteback= 1'b0;
     FlushExecute  = 1'b0;
     FlushDecode   = 1'b0;
     FlushWriteback= 1'b0;
@@ -63,7 +65,8 @@ always_comb begin
         StallDecode    = 1'b1;
         StallExecute   = 1'b1;
         StallMemory    = 1'b1;
-        FlushWriteback = 1'b1;
+        StallWriteback = 1'b1; // freeze writeback instead of flush
+        FlushWriteback = 1'b0;
         // freeze whole cpu
     end
 

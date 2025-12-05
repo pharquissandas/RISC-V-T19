@@ -307,6 +307,7 @@ module top (
         // clock
         .clk        (clk),
         .rst        (FlushWriteback),
+        .en         (~StallWriteback),
 
         // inputs from Memory stage
         .RegWriteM  (RegWriteM),
@@ -346,6 +347,7 @@ module top (
     logic StallFetch;
     logic StallExecute;
     logic StallMemory;
+    logic StallWriteback;
     logic FlushExecute;
     logic FlushDecode;
     logic FlushWriteback;
@@ -376,6 +378,7 @@ module top (
         .StallFetch  (StallFetch),
         .StallExecute(StallExecute),
         .StallMemory (StallMemory),
+        .StallWriteback (StallWriteback),
         .FlushExecute(FlushExecute),
         .FlushDecode (FlushDecode),
         .FlushWriteback (FlushWriteback),

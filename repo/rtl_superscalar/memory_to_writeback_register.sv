@@ -2,6 +2,8 @@ module memory_to_writeback_register(
 
     input logic clk,
     input logic rst,
+    input logic en,
+
     input logic RegWriteM,
     input logic [1:0] ResultSrcM,
 
@@ -31,7 +33,7 @@ module memory_to_writeback_register(
             PCPlus4W     <= 32'b0;
         end
 
-        else begin
+        else if (en) begin
 
             RegWriteW    <= RegWriteM;
             ResultSrcW   <= ResultSrcM;
