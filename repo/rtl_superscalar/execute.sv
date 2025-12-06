@@ -56,12 +56,19 @@ module execute(
         WriteDataE = SrcB;
     end
 
-    alu alu_inst (
+    alu alu_inst1 (
         .SrcA (SrcAE),
         .SrcB (SrcBE),
         .ALUControl (ALUControlE),
         .ALUResult (ALUResultE),
         .Zero (ZeroE)
+    );
+
+    alu alu_inst2(
+
+
+
+
     );
 
     pcsrc_unit pcsrc_unit_inst (
