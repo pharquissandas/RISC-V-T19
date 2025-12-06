@@ -33,58 +33,91 @@ module hazard_unit(
     output logic [1:0] ForwardAE2, //these are select inputs for muxes, 00 means no forwarding, 01 means forwarding of result in writeback stage, 10 means forwarding of result from ALU in memory stage
     output logic [1:0] ForwardBE2,  //these are select inputs for muxes
 
-    output logic StallDecode,
-    output logic StallFetch,
-    output logic StallExecute,
+    output logic StallFetch1,    
+    output logic StallDecode1,
+    output logic FlushDecode1,
+    output logic FlushExecute1,
 
-    output logic StallWriteback,
-    output logic FlushExecute,
-    output logic FlushDecode,
+    output logic StallFetch2,    
+    output logic StallDecode2,
+    output logic FlushDecode2,
+    output logic FlushExecute2
 
     
 );
 
 always_comb begin
-    ForwardAE     = 2'b00;
-    ForwardBE     = 2'b00;
-    StallDecode   = 1'b0;
-    StallFetch    = 1'b0;
-    StallExecute  = 1'b0;
-    //StallMemory   = 1'b0;
-    StallWriteback= 1'b0;
-    FlushExecute  = 1'b0;
-    FlushDecode   = 1'b0;
-    FlushWriteback= 1'b0;
-    //pc_redirect_o = 1'b0;
+    ForwardAE1     = 2'b00;
+    ForwardBE1     = 2'b00;
+    StallDecode1   = 1'b0;
+    StallFetch1    = 1'b0;
+    FlushExecute1  = 1'b0;
+    FlushDecode1  = 1'b0;
 
     if(Rs1E == 5'b0) // register x0 is never forwarded
-        ForwardAE = 2'b00;
-    else if((Rs1E == RdM) && RegWriteM && Rs1E != 0)
-        ForwardAE = 2'b10;
-    else if((Rs1E == RdW) && RegWriteW && Rs1E != 0)
-        ForwardAE = 2'b01;
+        ForwardAE1 = 2'b00;
+    else if((Rs1E == RdM1) && RegWriteM1 && Rs1E != 0)
+        ForwardAE1 = 2'b10;
+    else if((Rs1E == RdW1) && RegWriteW1 && Rs1E != 0)
+        ForwardAE1 = 2'b01;
 
     if(Rs2E == 5'b0) // register x0 is never forwarded
-        ForwardBE = 2'b00;
-    else if((Rs2E == RdM) &&  RegWriteM && Rs2E != 0)
-        ForwardBE = 2'b10;
-    else if((Rs2E == RdW) && RegWriteW && Rs2E != 0)
-        ForwardBE = 2'b01;
-
-    // ------stall logic------
+        ForwardBE1 = 2'b00;
+    else if((Rs2E == RdM1) &&  RegWriteM1 && Rs2E != 0)
+        ForwardBE1 = 2'b10;
+    else if((Rs2E == RdW1) && RegWriteW && Rs2E != 0)
+        ForwardBE1 = 2'b01;
 
     // unconditional jump control hazard (branch taken)
-    else if (PCSrcE != 2'b00) begin
-        FlushDecode = 1'b1;
-        FlushExecute = 1'b1;
-        // pc_redirect_o = 1'b1;
+    else if (PCSrcE1 != 2'b00) begin
+        FlushDecode1 = 1'b1;
+        FlushExecute1 = 1'b1;
     end
 
     // load-use hazard (data hazard)
-    else if (ResultSrcE == 2'b01 && (RdE != 0) && (RdE == Rs1D || RdE == Rs2D)) begin
-        StallDecode = 1'b1;
-        StallFetch = 1'b1;
-        FlushExecute = 1'b1;
+    else if (ResultSrcE1 == 2'b01 && (RdE1 != 0) && (RdE1 == Rs1D || RdE1 == Rs2D)) begin
+        StallDecode1 = 1'b1;
+        StallFetch1 = 1'b1;
+        FlushExecute1 = 1'b1;
     end
 end
+
+
+always_comb begin
+
+    ForwardAE2     = 2'b00;
+    ForwardBE2     = 2'b00;
+    StallDecode2   = 1'b0;
+    StallFetch2   = 1'b0;
+    FlushExecute2  = 1'b0;
+    FlushDecode2  = 1'b0;
+
+    if(Rs4E == 5'b0) // register x0 is never forwarded
+        ForwardAE2 = 2'b00;
+    else if((Rs4E == RdM2) && RegWriteM2 && Rs4E != 0)
+        ForwardAE2 = 2'b10;
+    else if((Rs4E == RdW2) && RegWriteW2 && Rs4E != 0)
+        ForwardAE2 = 2'b01;
+
+    if(Rs5E == 5'b0) // register x0 is never forwarded
+        ForwardBE2 = 2'b00;
+    else if((Rs5E == RdM2) &&  RegWriteM2 && Rs5E != 0)
+        ForwardBE2 = 2'b10;
+    else if((Rs5E == RdW2) && RegWriteW2 && Rs5E != 0)
+        ForwardBE2 = 2'b01;
+
+        // unconditional jump control hazard (branch taken)
+    else if (PCSrcE2 != 2'b00) begin
+        FlushDecode2 = 1'b1;
+        FlushExecute2 = 1'b1;
+    end
+
+    // load-use hazard (data hazard)
+    else if (ResultSrcE2 == 2'b01 && (RdE2 != 0) && (RdE2 == Rs4D || RdE2 == Rs5D)) begin
+        StallDecode2 = 1'b1;
+        StallFetch2 = 1'b1;
+        FlushExecute2 = 1'b1;
+    end
+end
+
 endmodule
