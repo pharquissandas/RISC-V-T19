@@ -84,7 +84,7 @@ public:
 
         // Save data and program memory files to test_out directory
         std::ignore = system(("mv data.hex test_out/" + name_ + "/data.hex").c_str());
-        std::ignore = system(("mv ../rtl_cached_design/program.hex test_out/" + name_ + "/program.hex").c_str());
+        std::ignore = system(("mv ../rtl_superscalar/program.hex test_out/" + name_ + "/program.hex").c_str());
     }
 
     void setData(const std::string &data_file)

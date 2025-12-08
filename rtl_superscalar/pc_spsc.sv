@@ -1,4 +1,4 @@
-module pc #(
+module pc_spsc #(
     parameter WIDTH = 32
 )(
 //Pipeline 1:
@@ -15,7 +15,7 @@ module pc #(
 
     /* verilator lint_on UNUSED */
     output logic [WIDTH-1:0]    PCPlus8F1, // PC + 4
-    output logic [WIDTH-1:0]    PCF1      // current program counter
+    output logic [WIDTH-1:0]    PCF1,      // current program counter
 
 //Pipeline 2:
     //input  logic                rst2,    // asynchronous reset
@@ -29,6 +29,13 @@ module pc #(
     input  logic [WIDTH-1:0]    ALUResultE2,
 
     /* verilator lint_on UNUSED */
+
+    input logic StallPipeline2,
+    input logic StallPipeline1NC,
+
+    input logic BranchIn1,
+    input logic BranchIn2,
+
     output logic [WIDTH-1:0]    PCPlus8F2, // PC + 4
     output logic [WIDTH-1:0]    PCF2      // current program counter
 );
@@ -63,6 +70,7 @@ always_comb begin
         default: PCNext2 = PCPlus8F2;
     endcase
 
+
 end
 
 
@@ -73,9 +81,26 @@ always_ff @(posedge clk) begin
         PCF1 <= {WIDTH{1'b0}};      // Reset PC1 to 0
         PCF2 <= 32'h4;              //Reset PC2 to 4
     end
+    else if (BranchIn1)begin
+        PCF1 <= PCNext1; // if we branch in pipeline 1
+        PCF2 <= PCNext1 + 4; // next instruction in pipeline 2 
+        //will be next instruction in pipeline 1 + 4
+    end
+    else if (BranchIn2)begin //if we have branches in both this isnt evaluated
+    //this is the desired behaviour
+    //as then we want only the first branch to be taken
+        PCF1 <= PCNext2 + 4;
+        PCF2 <= PCNext2;
+    end
+    else if(StallPipeline2) begin
+        PCF2 <= PCF2;
+    end
+    else if(StallPipeline1NC)begin
+        PCF1 <= PCF1;
+    end
     else if (en) begin
         PCF1 <= PCNext1;            // Update PC normally
-        PCF2 <= PCNext2
+        PCF2 <= PCNext2;
     end
 end
 

@@ -4,7 +4,11 @@
 
 # Default vars
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
+<<<<<<< HEAD:tb/assemble.sh
 output_file="../rtl_single_cycle/program.hex"
+=======
+output_file="../rtl_superscalar/program.hex"
+>>>>>>> 318d68b (inefficient superscalar nearly done):repo/tb/assemble.sh
 
 # Handle terminal arguments
 if [[ $# -eq 0 ]]; then

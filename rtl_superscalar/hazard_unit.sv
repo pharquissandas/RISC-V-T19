@@ -43,9 +43,18 @@ module hazard_unit(
     output logic FlushDecode2,
     output logic FlushExecute2,
 
-    output logic StallPipeline2
+    output logic BranchIn1,
+    output logic BranchIn2,
 
-    
+    output logic StallExecute1,
+    output logic StallExecute2,
+    output logic StallMemory1,
+    output logic StallMemory2,
+    output logic StallWriteback1,
+    output logic StallWriteback2,
+    output logic FlushWriteback1,
+    output logic FlushWriteback2
+
 );
 
 always_comb begin
@@ -67,13 +76,19 @@ always_comb begin
         ForwardBE1 = 2'b00;
     else if((Rs2E == RdM1) &&  RegWriteM1 && Rs2E != 0)
         ForwardBE1 = 2'b10;
-    else if((Rs2E == RdW1) && RegWriteW && Rs2E != 0)
+    else if((Rs2E == RdW1) && RegWriteW1 && Rs2E != 0)
         ForwardBE1 = 2'b01;
 
     // unconditional jump control hazard (branch taken)
     else if (PCSrcE1 != 2'b00) begin
         FlushDecode1 = 1'b1;
         FlushExecute1 = 1'b1;
+
+        FlushDecode2 = 1'b1;
+        FlushExecute2 = 1'b1;
+
+        BranchIn1 = 1'b1;
+
     end
 
     // load-use hazard (data hazard)
@@ -112,6 +127,12 @@ always_comb begin
     else if (PCSrcE2 != 2'b00) begin
         FlushDecode2 = 1'b1;
         FlushExecute2 = 1'b1;
+
+        FlushDecode1 = 1'b1;
+        FlushExecute1 = 1'b1;
+
+        BranchIn2 = 1'b1;
+
     end
 
     // load-use hazard (data hazard)
@@ -120,13 +141,6 @@ always_comb begin
         StallFetch2 = 1'b1;
         FlushExecute2 = 1'b1;
     end
-end
-
-always_comb begin
-
-    if()
-
-
 end
 
 

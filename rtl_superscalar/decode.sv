@@ -44,6 +44,8 @@ module decode(
     output logic        ALUSrcBD2,
     output logic        ALUSrcAD2,
     output logic [2:0]  AddressingControlD2,
+    output StallPipeline2,
+    output StallPipeline1NC,    
     output logic [31:0] a0,
     output logic [31:0] a1
 );
@@ -53,6 +55,7 @@ module decode(
     logic [2:0] ImmSrcD2;
 
     always_comb begin
+
         Rs1D = InstrD1[19:15];
         Rs2D = InstrD1[24:20];
         RdD1 = InstrD1[11:7];
@@ -132,9 +135,20 @@ module decode(
 
     sign_ext sign_ext2(
         .Imm(InstrD2[31:7]),
-        .ImmSrc(ImmSrcD2)
+        .ImmSrc(ImmSrcD2),
 
         .ImmExt(ImmExtD2)
     );
+
+    dependencies_unit dependencies_unit_inst(
+        .clk(clk),
+        .RdD1(RdD1),
+        .RdD2(RdD2),
+   
+        .StallPipeline2(StallPipeline2),
+        .StallPipeline1NC(StallPipeline1NC)
+    );
+
+
 
 endmodule

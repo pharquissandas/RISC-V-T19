@@ -22,47 +22,76 @@ module execute(
     input logic [31:0] RD4E,
     input logic [31:0] RD5E,
 
-    input logic [1:0] ForwardAE,
-    input logic [1:0] ForwardBE,
+    input logic [1:0] ForwardAE1,
+    input logic [1:0] ForwardBE1,
+    input logic [1:0] ForwardAE2,
+    input logic [1:0] ForwardBE2,
 
     input logic [31:0] PCE1,
     input logic [31:0] PCE2,
     input logic [31:0] ImmExtE1,
     input logic [31:0] ImmExtE2,
 
-    output logic [31:0] WriteDataE,
-    output logic [1:0]  PCSrcE,
-    output logic [31:0] ALUResultE,
-    output logic [31:0] PCTargetE
+    output logic [31:0] WriteDataE1,
+    output logic [1:0]  PCSrcE1,
+    output logic [31:0] ALUResultE1,
+    output logic [31:0] PCTargetE1,
+    output logic [31:0] WriteDataE2,
+    output logic [1:0]  PCSrcE2,
+    output logic [31:0] ALUResultE2,
+    output logic [31:0] PCTargetE2
+
 );
 
     logic ZeroE1;
     logic ZeroE2;
-    logic [31:0] SrcB, SrcA;
-    logic [31:0] SrcBE1, SrcAE1. SrcAE2,SrcBE2;
+    logic [31:0] SrcB1, SrcA1, SrcB2, SrcA2;
+    logic [31:0] SrcBE1, SrcAE1, SrcAE2,SrcBE2;
 
     always_comb begin
-        case (ForwardAE)
-            2'b00: SrcA = RD1E;
-            2'b01: SrcA = ResultW;
-            2'b10: SrcA = ALUResultM;
-            default: SrcA = RD1E;
+        case (ForwardAE1)
+            2'b00: SrcA1 = RD1E;
+            2'b01: SrcA1 = ResultW1;
+            2'b10: SrcA1 = ALUResultM1;
+            default: SrcA1 = RD1E;
         endcase
 
-        case (ForwardBE)
-            2'b00: SrcB = RD2E;
-            2'b01: SrcB = ResultW;
-            2'b10: SrcB = ALUResultM;
-            default: SrcB = RD2E;
+        case (ForwardBE1)
+            2'b00: SrcB1 = RD2E;
+            2'b01: SrcB1 = ResultW1;
+            2'b10: SrcB1 = ALUResultM1;
+            default: SrcB1 = RD2E;
         endcase
 
-        SrcAE = ALUSrcAE ? PCE : SrcA;
-        SrcBE = ALUSrcBE ? ImmExtE : SrcB;
+        SrcAE1 = ALUSrcAE1 ? PCE1 : SrcA1;
+        SrcBE1 = ALUSrcBE1 ? ImmExtE1 : SrcB1;
 
         PCTargetE1  = PCE1 + ImmExtE1;
-        PCTargetE2  = PCE2 + ImmExtE2;
+    
+        WriteDataE1 = SrcB1;
+    end
 
-        WriteDataE1 = SrcB;
+    always_comb begin
+        case (ForwardAE2)
+            2'b00: SrcA2 = RD4E;
+            2'b01: SrcA2 = ResultW2;
+            2'b10: SrcA2 = ALUResultM2;
+            default: SrcA2 = RD4E;
+        endcase
+
+        case (ForwardBE2)
+            2'b00: SrcB2 = RD5E;
+            2'b01: SrcB2 = ResultW2;
+            2'b10: SrcB2 = ALUResultM2;
+            default: SrcB2 = RD5E;
+        endcase
+
+        SrcAE2 = ALUSrcAE2 ? PCE2 : SrcA2;
+        SrcBE1 = ALUSrcBE2 ? ImmExtE2 : SrcB2;
+
+        PCTargetE2  = PCE2 + ImmExtE2;
+    
+        WriteDataE2 = SrcB2;
     end
 
     alu alu_inst1 (
@@ -80,7 +109,7 @@ module execute(
         .ALUControl(ALUControlE2),
 
         .ALUResult(ALUResultE2),
-        .zero(ZeroE2)
+        .Zero(ZeroE2)
 
     );
 
@@ -102,28 +131,5 @@ module execute(
         .PCSrc (PCSrcE2)
     );
 
-    // branch prediction and bht update signals
-    assign execute_is_branch_o = BranchE && (JumpE == 2'b00);
-    assign execute_branch_taken_o = execute_is_branch_o && (PCSrcE == 2'b01);
 
-    // misprediction detection
-    always_comb begin
-        branch_mispredict_o = 1'b0;
-        mispredict_target_pc_o = 32'b0; 
-
-        // only check for misprediction on conditional branches
-        if (execute_is_branch_o) begin
-            // check if actual outcome differs from predicted outcome
-            if (execute_branch_taken_o != predict_taken_i) begin
-                branch_mispredict_o = 1'b1;
-                // determine correct target PC
-                if (execute_branch_taken_o) begin
-                    mispredict_target_pc_o = PCTargetE; // branch taken
-                end
-                else begin
-                    mispredict_target_pc_o = PCE + 4; // branch not taken
-                end
-            end
-        end
-    end
 endmodule

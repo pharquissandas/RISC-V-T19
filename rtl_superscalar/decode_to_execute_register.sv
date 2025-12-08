@@ -1,7 +1,9 @@
 module decode_to_execute_register(
     input logic clk,
-    input logic rst,
-    input logic en,
+    input logic rst1,
+    input logic rst2,
+    input logic en1,
+    input logic en2,
 
     // control signals from Control.sv
     input logic RegWriteD1,
@@ -85,7 +87,7 @@ module decode_to_execute_register(
 );
     always_ff @(posedge clk) begin
 
-        if(rst) begin
+        if(rst1) begin
 
             RegWriteE1 <= 1'b0;
             ResultSrcE1 <= 2'b0;
@@ -98,6 +100,47 @@ module decode_to_execute_register(
             AddressingControlE1 <= 3'b0;
             BranchTypeE1 <= 3'b0;
 
+            RD1E <= 31'b0;
+            RD2E <= 31'b0;
+            PCE1 <= 31'b0;
+            Rs1E <= 5'b0;
+            Rs2E <= 5'b0;
+            RdE1 <= 5'b0;
+            ImmExtE1 <= 31'b0;
+            PCPlus8E1 <= 31'b0;
+
+        end
+
+        else if (en1) begin
+            RegWriteE1 <= RegWriteD1;
+            ResultSrcE1 <= ResultSrcD1;
+            MemWriteE1 <= MemWriteD1;
+            JumpE1 <= JumpD1;
+            BranchE1 <= BranchD1;
+            ALUControlE1 <= ALUControlD1;
+            ALUSrcAE1 <= ALUSrcAD1;
+            ALUSrcBE1 <= ALUSrcBD1;
+            AddressingControlE1 <= AddressingControlD1;
+            BranchTypeE1 <= BranchTypeD1;
+            
+            
+
+            RD1E <= RD1D;
+            RD2E <= RD2D;
+            PCE1 <= PCD1;
+            Rs1E <= Rs1D;
+            Rs2E <= Rs2D;
+            RdE1 <= RdD1;
+            ImmExtE1 <= ImmExtD1;
+            PCPlus8E1 <= PCPlus8D1;
+        end
+    end
+
+
+    always_ff @(posedge clk) begin
+
+        if (rst2) begin
+            
             RegWriteE2 <= 1'b0;
             ResultSrcE2 <= 2'b0;
             MemWriteE2 <= 1'b0;
@@ -108,66 +151,43 @@ module decode_to_execute_register(
             ALUSrcBE2 <= 1'b0;
             AddressingControlE2 <= 3'b0;
             BranchTypeE2 <= 3'b0;
-
-            RD1E <= 31'b0;
-            RD2E <= 31'b0;
+            
             RD4E <= 31'b0;
             RD5E <= 31'b0;
-            PCE1 <= 31'b0;
             PCE2 <= 31'b0;
-            Rs1E <= 5'b0;
-            Rs2E <= 5'b0;
             Rs4E <= 5'b0;
             Rs5E <= 5'b0;
-            RdE1 <= 5'b0;
             RdE2 <= 5'b0;
-            ImmExtE1 <= 31'b0;
             ImmExtE2 <= 31'b0;
-            PCPlus8E1 <= 31'b0;
             PCPlus8E2 <= 31'b0;
 
         end
 
-        else if (en) begin
-            RegWriteE1 <= RegWriteD1;
-            ResultSrcE1 <= ResultSrcD1
-            MemWriteE1 <= MemWriteD1;
-            JumpE1 <= JumpD1;
-            BranchE1 <= BranchD1;
-            ALUControlE1 <= ALUControlD1;
-            ALUSrcAE1 <= ALUSrcAD1;
-            ALUSrcBE1 <= ALUSrcBD1;
-            AddressingControlE1 <= AddressingControlD1;
-            BranchTypeE1 <= BranchTypeD1;
-            
-            RegWriteE1 <= RegWriteD2;
-            ResultSrcE1 <= ResultSrcD2
-            MemWriteE1 <= MemWriteD2;
-            JumpE1 <= JumpD2;
-            BranchE1 <= BranchD2;
-            ALUControlE1 <= ALUControlD2;
-            ALUSrcAE1 <= ALUSrcAD2;
-            ALUSrcBE1 <= ALUSrcBD2;
-            AddressingControlE1 <= AddressingControlD2;
-            BranchTypeE1 <= BranchTypeD2;
+        else if (en2) begin
 
-            RD1E <= RD1D;
-            RD2E <= RD2D;
+            RegWriteE2 <= RegWriteD2;
+            ResultSrcE2 <= ResultSrcD2;
+            MemWriteE2 <= MemWriteD2;
+            JumpE2 <= JumpD2;
+            BranchE2 <= BranchD2;
+            ALUControlE2 <= ALUControlD2;
+            ALUSrcAE2 <= ALUSrcAD2;
+            ALUSrcBE2 <= ALUSrcBD2;
+            AddressingControlE2 <= AddressingControlD2;
+            BranchTypeE2 <= BranchTypeD2;
+
             RD4E <= RD4D;
             RD5E <= RD5D;
-            PCE1 <= PCD1;
             PCE2 <= PCD2;
-            Rs1E <= Rs1D;
-            Rs2E <= Rs2D;
             Rs4E <= Rs4D;
             Rs5E <= Rs5D;
-            RdE1 <= RdD1;
             RdE2 <= RdD2;
-            ImmExtE1 <= ImmExtD1;
             ImmExtE2 <= ImmExtD2;
-            PCPlus8E1 <= PCPlus8D1;
             PCPlus8E2 <= PCPlus8D2;
         end
+
+
     end
+
 
 endmodule

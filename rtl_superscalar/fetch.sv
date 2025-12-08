@@ -8,6 +8,12 @@ module fetch(
     input logic [1:0] PCSrcE2,
     input logic [31:0] PCTargetE2,
     input logic [31:0] ALUResultE2,
+    input StallPipeline2,
+    input StallPipeline1NC, //Stall Pipeline 1 in the next cycle
+
+    input logic BranchIn1,
+    input logic BranchIn2,
+
     
     output logic [31:0] InstrF1,
     output logic [31:0] InstrF2,
@@ -17,11 +23,16 @@ module fetch(
     output logic [31:0] PCPlus8F2
 );
 
+    always_comb begin
+        PCF1 = PCF1_IN;
+        PCF2 = PCF2_IN;
+    end
 
-    logic  [31:0] PCF1;
-    logic  [31:0] PCF2;
 
-    pc pc_inst(
+    logic  [31:0] PCF1_IN; //internal signal
+    logic  [31:0] PCF2_IN; //internal signal
+
+    pc_spsc pc_spsc_inst(
         .clk(clk),
         .rst(rst),
         .en(en),
@@ -31,18 +42,24 @@ module fetch(
         .PCSrcE2(PCSrcE2),
         .ALUResultE2(ALUResultE2),
         .PCTargetE2(PCTargetE2),
+        .StallPipeline2(StallPipeline2),
+        .StallPipeline1NC(StallPipeline1NC),
+        .BranchIn1(BranchIn1),
+        .BranchIn2(BranchIn2),
 
-        .PCF1(PCF1),
-        .PCF2(PCF2),
-        .PCPlus8F2(PCPlus8F1),
+        .PCF1(PCF1_IN),
+        .PCF2(PCF2_IN),
+        .PCPlus8F1(PCPlus8F1),
         .PCPlus8F2(PCPlus8F2)
     );
 
     instr_mem instr_mem_inst(
-        .A1(PCF1),
-        .A2(PCF2),
-        
-        .RD1(InstrF1)
+        .A1(PCF1_IN),
+        .A2(PCF2_IN),
+
+        .RD1(InstrF1),
         .RD2(InstrF2)
     );
+
+
 endmodule

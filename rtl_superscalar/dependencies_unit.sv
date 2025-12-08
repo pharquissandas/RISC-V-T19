@@ -1,17 +1,15 @@
 module dependencies_unit(
-
+    
+    input clk,
     input [4:0] RdD1,
     input [4:0] RdD2,
-    input [31:0] PCD1,
-    input [31:0] PCD2,
-    input [31:0] PCF1,
-    input [31:0] PCF2,
-
-
-
-    
-    output [31:0] PCNextNew1,    
-    output StallPipeline2
+    // input [31:0] PCD1,
+    // input [31:0] PCD2,
+    // input [31:0] PCF1,
+    // input [31:0] PCF2,
+  
+    output StallPipeline2,
+    output StallPipeline1NC
 
 );
 
@@ -22,16 +20,22 @@ always_comb begin
 
 
     if(RdD1 == RdD2)
-        StallPipeline2 = 1'b1;
+        StallPipeline2 = 1'b1; // with a dependency we stall pipeline 2 first allow p1 to run
         //PCNextNew1 = PCD2
         //PCNextNew2 = PCF2 -> implement with MUX in fetch stage 
-
-
+        //StallPipeline1NC = 1'b1;//cycle after p2 is stalled we stall p1 and let p2 run
 
 end
 
 
+always_ff @(posedge clk)begin
 
+    if(StallPipeline2)
+        StallPipeline1NC <= 1'b1;
+    else
+        StallPipeline1NC <= 1'b0;
+
+end
 
 
 endmodule
