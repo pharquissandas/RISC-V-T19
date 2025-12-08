@@ -1,2 +1,3 @@
-.DS_Store
-repo/.DS_Store
+# Ignore large simulation files (VCD) and build artifacts
+*.vcd
+obj_dir/
