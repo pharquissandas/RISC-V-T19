@@ -25,7 +25,9 @@ build:      # function to build prob dist func (pdf)
     LI      a2, 0               # a2 = offset into of data array
     LI      a3, base_pdf        # a3 = base address of pdf array
     LI      a4, max_count       # a4 = maximum count to terminate
+    LI      t3, 0 
 _loop2:                         # repeat
+    ADDI    t3, t3, 1           # increment loop counter
     ADD     a5, a1, a2          #     a5 = data base address + offset
     LBU     t0, 0(a5)           #     t0 = data value
     ADD     a6, t0, a3          #     a6 = index into pdf array
