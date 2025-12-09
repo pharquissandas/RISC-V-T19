@@ -1,6 +1,10 @@
 module instr_mem (
-    input logic [31:0] A,
-    output logic [31:0] RD
+    /* verilator lint_off UNUSED */
+    input logic [31:0] A1,
+    input logic [31:0] A2,
+    /* verilator lint_on UNUSED */
+    output logic [31:0] RD1,
+    output logic [31:0] RD2
 );
 
     // instruction memory array: 4096 words of 32 bits each
@@ -8,9 +12,10 @@ module instr_mem (
 
     // preload instructions from an external hex file at simulation start
     initial begin
-        $readmemh("../rtl_pipelined/program.hex", rom_array);
+        $readmemh("../rtl_cached_design/program.hex", rom_array);
     end
 
     // output the instruction corresponding to the PC address
-    assign RD = rom_array[A[13:2]];
+    assign RD1 = rom_array[A1[13:2]];
+    assign RD2 = rom_array[A2[13:2]];
 endmodule
