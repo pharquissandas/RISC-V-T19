@@ -1,0 +1,18 @@
+WIDTH=32;
+DEPTH=4096;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    -- loop left:
+    000 : 00040513; -- mv a0, s0
+    001 : 00940663; -- beq s0, s1, reset
+    002 : 00141413; -- slli s0, s0, 1
+    003 : ff5ff06f; -- j loop_left
+    -- reset:
+    004 : 00100413; -- li s0, 1
+    005 : fedff06f; -- j loop_left
+    
+    [008..FFF] : 00000000;
+END;

@@ -1,0 +1,13 @@
+WIDTH=32;
+DEPTH=4096;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    000 : 00000413; -- li s0, 0
+    001 : 00040513; -- mv a0, s0
+    002 : 00140413; -- addi s0, s0, 1
+    003 : ff9ff06f; -- j -4 (loop)
+    [004..FFF] : 00000000;
+END;
