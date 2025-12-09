@@ -27,7 +27,8 @@ always_ff @(posedge clk or posedge rst) begin
             bht[i] <= 2'b00; // Initialize to weakly not taken
         end
     end else if (execute_is_branch_i) begin
-        logic [1:0] current_state = bht[execute_bht_index];
+        logic [1:0] current_state;
+        current_state <= bht[execute_bht_index];
 
         if (execute_branch_taken_i) begin
             bht[execute_bht_index] <= (current_state == 2'b11) ? 2'b11 : current_state + 1;

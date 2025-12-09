@@ -2,6 +2,8 @@
 /* verilator lint_off BLKSEQ */
 /* verilator lint_off SYNCASYNCNET */
 
+// 64 sets, 6 bit set, 24 bit tag, 256 bytes per way, 512 byte capacity
+
 module data_cache #(
     parameter XLEN = 32
 ) (
@@ -20,35 +22,35 @@ module data_cache #(
     output logic stall
 );
 
-logic [20:0] tag;
-logic [8:0] set;
+logic [23:0] tag;
+logic [5:0] set;
+logic [1:0] byte_offset;
 
 // WAY 0 ARRAYS
-logic        v_way0    [511:0]; // valid bit
-logic        d_way0    [511:0]; // dirty bit
-logic [20:0] tag_way0  [511:0]; // tag
-logic [31:0] data_way0 [511:0]; // data
+logic        v_way0    [63:0]; // valid bit
+logic        d_way0    [63:0]; // dirty bit
+logic [23:0] tag_way0  [63:0]; // tag
+logic [31:0] data_way0 [63:0]; // data
 // WAY 1 ARRAYS
-logic        v_way1    [511:0]; // valid bit
-logic        d_way1    [511:0]; // dirty bit
-logic [20:0] tag_way1  [511:0]; // tag
-logic [31:0] data_way1 [511:0]; // data
+logic        v_way1    [63:0]; // valid bit
+logic        d_way1    [63:0]; // dirty bit
+logic [23:0] tag_way1  [63:0]; // tag
+logic [31:0] data_way1 [63:0]; // data
 
-logic u_bit [511:0]; // 0 = way0 accessed most recently, 1 = way1 accessed most recently
+logic u_bit [63:0]; // 0 = way0 accessed most recently, 1 = way1 accessed most recently
 
 logic hit0; // way 0 hit
 logic hit1; // way 1 hit
 logic hit;
 
 logic [31:0] result; // result after SB SH SW logic
-logic [1:0] byte_offset;
 
 logic stalling0; // 0 = normal, 1 = stalling
 logic stalling1; // 0 = normal, 1 = stalling
 
 // clear cache valid bits on startup
 initial begin
-    for (int i = 0; i < 512; i++) begin
+    for (int i = 0; i < 64; i++) begin
         v_way0[i] = 0;
         v_way1[i] = 0;
         u_bit [i] = 0;
@@ -57,8 +59,8 @@ initial begin
     end
 end
 
-assign tag = A[31:11];
-assign set = A[10:2];
+assign tag = A[31:8];
+assign set = A[7:2];
 assign byte_offset = A[1:0];
 
 assign hit0 = v_way0[set] && (tag_way0[set] == tag);
@@ -98,7 +100,7 @@ end
 always_ff @(posedge clk) begin
     // reset valid bits on a rst signal
     if (rst) begin
-        for(int i=0; i<512; i++) begin
+        for(int i=0; i<64; i++) begin
             v_way0[i] = 0;
             v_way1[i] = 0;
             u_bit [i] = 0;
