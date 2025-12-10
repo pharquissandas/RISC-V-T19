@@ -87,7 +87,7 @@ module execute(
         endcase
 
         SrcAE2 = ALUSrcAE2 ? PCE2 : SrcA2;
-        SrcBE1 = ALUSrcBE2 ? ImmExtE2 : SrcB2;
+        SrcBE2 = ALUSrcBE2 ? ImmExtE2 : SrcB2;
 
         PCTargetE2  = PCE2 + ImmExtE2;
     

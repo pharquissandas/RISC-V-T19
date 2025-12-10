@@ -3,13 +3,9 @@ module dependencies_unit(
     input clk,
     input [4:0] RdD1,
     input [4:0] RdD2,
-    // input [31:0] PCD1,
-    // input [31:0] PCD2,
-    // input [31:0] PCF1,
-    // input [31:0] PCF2,
   
-    output StallPipeline2,
-    output StallPipeline1NC
+    output logic StallPipeline2,
+    output logic StallPipeline1NC
 
 );
 

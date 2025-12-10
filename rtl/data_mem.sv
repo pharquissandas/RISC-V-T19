@@ -31,15 +31,22 @@ module data_mem #(
     assign addr1 = A1[ADDRESS_WIDTH-1:0]; // use lower ADDRESS_WIDTH bits of address
     assign addr2 = A2[ADDRESS_WIDTH-1:0]; // use lower ADDRESS_WIDTH bits of address
 
-    always_ff @(posedge clk) begin
+    always_comb begin 
 
         if(WE1 && WE2)begin
-            if (addr1 == addr2) // if both instructions are trying to write the same location in memory we only write the result of the later instruction
-                //but this should never occur if we have handled dependencies correctly before
-                conflict = 1'b1;
+                    if (addr1 == addr2) // if both instructions are trying to write the same location in memory we only write the result of the later instruction
+                        //but this should never occur if we have handled dependencies correctly before
+                        conflict = 1'b1;
         end
 
-        else if (WE1) begin
+    end
+
+
+
+
+    always_ff @(posedge clk) begin
+
+        if (WE1) begin
             case (AddressingControl1)
                 3'b000: ram_array[addr1] <= WD1[7:0]; // SB
                 3'b001: begin                      // SH

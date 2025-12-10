@@ -30,9 +30,9 @@ module reg_file #(
     //write occurs on negative edge of clock cycle
     //register 0 is never written
     always_ff @(negedge clk) begin
-        if (WE3 == 1'b1 && AD3 != 32'b0)
+        if (WE3 == 1'b1 && AD3 != 5'b0)
             ram_array[AD3] <= WD3;
-        if (WE6 == 1'b1 && AD3 != 32'b0 && WE6 != WE3) //WE6!= WE3 should always be the case due to implementing a stall
+        if (WE6 == 1'b1 && AD6 != 5'b0 && AD6 != AD3) //WE6!= WE3 should always be the case due to implementing a stall
             ram_array[AD6] <= WD6;
     end
 

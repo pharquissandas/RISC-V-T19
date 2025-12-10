@@ -58,12 +58,20 @@ module hazard_unit(
 );
 
 always_comb begin
+    BranchIn1      = 1'b0;
+    BranchIn2      = 1'b0;
     ForwardAE1     = 2'b00;
     ForwardBE1     = 2'b00;
     StallDecode1   = 1'b0;
     StallFetch1    = 1'b0;
     FlushExecute1  = 1'b0;
     FlushDecode1  = 1'b0;
+    ForwardAE2     = 2'b00;
+    ForwardBE2     = 2'b00;
+    StallDecode2   = 1'b0;
+    StallFetch2   = 1'b0;
+    FlushExecute2  = 1'b0;
+    FlushDecode2  = 1'b0;
 
     if(Rs1E == 5'b0) // register x0 is never forwarded
         ForwardAE1 = 2'b00;
@@ -97,17 +105,7 @@ always_comb begin
         StallFetch1 = 1'b1;
         FlushExecute1 = 1'b1;
     end
-end
 
-
-always_comb begin
-
-    ForwardAE2     = 2'b00;
-    ForwardBE2     = 2'b00;
-    StallDecode2   = 1'b0;
-    StallFetch2   = 1'b0;
-    FlushExecute2  = 1'b0;
-    FlushDecode2  = 1'b0;
 
     if(Rs4E == 5'b0) // register x0 is never forwarded
         ForwardAE2 = 2'b00;
@@ -141,7 +139,8 @@ always_comb begin
         StallFetch2 = 1'b1;
         FlushExecute2 = 1'b1;
     end
-end
 
+
+end
 
 endmodule

@@ -100,14 +100,14 @@ module decode_to_execute_register(
             AddressingControlE1 <= 3'b0;
             BranchTypeE1 <= 3'b0;
 
-            RD1E <= 31'b0;
-            RD2E <= 31'b0;
-            PCE1 <= 31'b0;
+            RD1E <= 32'b0;
+            RD2E <= 32'b0;
+            PCE1 <= 32'b0;
             Rs1E <= 5'b0;
             Rs2E <= 5'b0;
             RdE1 <= 5'b0;
-            ImmExtE1 <= 31'b0;
-            PCPlus8E1 <= 31'b0;
+            ImmExtE1 <= 32'b0;
+            PCPlus8E1 <= 32'b0;
 
         end
 
@@ -152,14 +152,14 @@ module decode_to_execute_register(
             AddressingControlE2 <= 3'b0;
             BranchTypeE2 <= 3'b0;
             
-            RD4E <= 31'b0;
-            RD5E <= 31'b0;
-            PCE2 <= 31'b0;
+            RD4E <= 32'b0;
+            RD5E <= 32'b0;
+            PCE2 <= 32'b0;
             Rs4E <= 5'b0;
             Rs5E <= 5'b0;
             RdE2 <= 5'b0;
-            ImmExtE2 <= 31'b0;
-            PCPlus8E2 <= 31'b0;
+            ImmExtE2 <= 32'b0;
+            PCPlus8E2 <= 32'b0;
 
         end
 
