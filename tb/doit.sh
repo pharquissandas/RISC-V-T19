@@ -4,12 +4,12 @@
 # Usage: ./doit.sh <file1.cpp> <file2.cpp>
 
 # Constants
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
-TEST_FOLDER=$(realpath "$SCRIPT_DIR/tests")
-RTL_FOLDER=$(realpath "$SCRIPT_DIR/../rtl_single_cycle") #<-- change file path for different designs
-GREEN=$(tput setaf 2)
-RED=$(tput setaf 1)
-RESET=$(tput sgr0)
+SCRIPT_DIR=$(dirname "$(realpath "$0")") #SCRIPT_DIR is the directory this file is in
+TEST_FOLDER=$(realpath "$SCRIPT_DIR/tests") #test folder is a folder in this directory with name tests
+RTL_FOLDER=$(realpath "$SCRIPT_DIR/../rtl") #RTL_FOLDER is set to a file called rtl from the directory above this one
+GREEN=$(tput setaf 2) #setting terminal text colour to green
+RED=$(tput setaf 1) #setting terminal text colour to red
+RESET=$(tput sgr0) #resets terminal text to black and white
 
 # Variables
 passes=0
