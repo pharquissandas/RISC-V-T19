@@ -10,7 +10,7 @@ reference: pdf.s
 	@riscv64-unknown-elf-ld -melf32lriscv -e 0xBFC00000 -Ttext 0xBFC00000 -o pdf.out.reloc pdf.out
 	@riscv64-unknown-elf-objcopy -O binary -j .text pdf.out.reloc pdf.bin
 	@riscv64-unknown-elf-objdump -D -S -l -F -Mno-aliases pdf.out.reloc > pdf.asm
-	@set -euo pipefail
+# 	@set -euo pipefail
 	@od -v -An -t x1 pdf.bin | tr -s '\n' | awk '{pdf=pdf};1' > pdf.hex
 	@rm pdf.out
 	@rm pdf.out.reloc

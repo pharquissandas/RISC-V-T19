@@ -16,7 +16,7 @@ module data_mem #(
 
     initial begin
         // Load the data.hex file into memory at the start of simulation
-        $readmemh("data.hex", ram_array);
+        $readmemh("data.hex", ram_array, 32'h00010000);
     end
 
     logic [ADDRESS_WIDTH-1:0] addr;
