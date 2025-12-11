@@ -42,22 +42,21 @@ This repository is organized to contain all deliverables, separating source code
 ## Important Notes and Critical Points
 
 ### Core Design Status
-The highest level of achievement successfully verified is the **Cached Pipelined RV32I Design Supporting All Base RV32I Instruction Set** (Stretch Goal 1/2/3).
+The highest level of achievement successfully verified is the **Cached Pipelined RV32I Design Supporting All Base RV32I Instruction Set** (Stretch Goal 1, 2 & 3).
 
 ### Critical Points for Assessment
 1.  **Branch Management (Required):** All major processor versions are accessible via dedicated branches, which contain the correct design in the **`rtl`** folder:
-    * **`main`**: Single-Cycle RV32I Design Supporting All Base RV32I Instruction Set (Stretch Goal 3)
-    * **`pipelined`**: Pipelined RV32I Design Supporting All Base RV32I Instruction Set (Stretch Goal 1/3)
-    * **`cached`**: Pipelined + 2-Way Set-Associative Data Cache Supporting All Base RV32I Instruction Set (Stretch Goal 1/2/3)
-    * **`fpga`**: FPGA-optimized Pipelined Design (Specialized)
-    * **`superscalar`**: Superscalar Pipelined Design (Advanced Extension)
+    * **main** — Single-Cycle RV32I CPU with full RV32I base instruction support (Stretch Goal 3)  
+    * **pipelined** — Verified five-stage pipelined RV32I CPU with full instruction support (Stretch Goals 1 & 3)  
+    * **cached** — Pipelined CPU extended with a 2-way set-associative data cache (Stretch Goals 1, 2 & 3)  
+    * **fpga** — FPGA-oriented variant of the pipelined design (special exploration)  
+    * **superscalar** — Draft superscalar extension (advanced exploratory work)
 2.  **Verification:** The **`cached`** design successfully passes:
     * The team's F1 starting light program.
     * The reference **`pdf.asm`** program (evidence below).
     * All five verification programs in the `tb/asm` folder.
 3.  **Data Cache:** The implementation uses a **2-way set-associative data cache** with a capacity of **4096 bytes** (1k words) and LRU replacement.
 4.  **Final Verification Status:** The **PDF calculation program** is now fully verified and correctly plots all four reference data distributions (`gaussian`, `noisy`, `triangle`, `sine`).
-
 ---
 
 ## Quick Start (Build and Run)
@@ -102,7 +101,8 @@ The following shell scripts in the `tb` directory are used to run all verificati
 
 ## Overview of Achieved Goals
 
-The team successfully implemented the **Single-Cycle RV32I Design** and achieved **Stretch Goal 2** by implementing a **Pipelined Processor with a 2-way Set-Associative Data Cache**. Furthermore, specialized FPGA and Superscalar versions were explored.
+The team successfully implemented the Single-Cycle RV32I processor and progressed beyond the basic requirements by completing all **three stretch goals**. The highest verified milestone is the **Cached Five-Stage Pipelined RV32I Processor supporting the full RV32I base instruction set** (Stretch Goals 1, 2, and 3). Additional exploratory work was carried out on FPGA-oriented and superscalar variants.
+
 
 ### Contribution Table
 | Design Phase | Contributions | Preet | Mikhail | Ojas | Fangnan |
