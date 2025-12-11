@@ -164,7 +164,7 @@ I implemented the logic to interface with the Vbuddy for visual feedback, displa
     2. `chmod +x attach_usb.sh` followed by `attach_usb.sh` (to connect to Vbuddy).
     3. `./pdf.sh reference/gaussian.mem` (and subsequently all other data files: `noisy.mem`, `sine.mem`, `triangle.mem`).
 
-* More detailed explanation about the Vbuddy and the PDF program will be in `tb/reference/documentation.md`
+* More detailed explanation about the Vbuddy and the PDF program will be in `tb/reference/README.md`
 
 * Commit: [`66936ba`](https://github.com/pharquissandas/RISC-V-T19/commit/66936ba3a238b9ef7c3b519abf49e65084b04c6a)
 
