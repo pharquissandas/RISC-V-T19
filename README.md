@@ -42,13 +42,13 @@ This repository is organized to contain all deliverables, separating source code
 ## Important Notes and Critical Points
 
 ### Core Design Status
-The highest level of achievement successfully verified is the **Cached Pipelined RV32I Design** (Stretch Goal 2).
+The highest level of achievement successfully verified is the **Cached Pipelined RV32I Design Supporting All Base RV32I Instruction Set** (Stretch Goal 1/2/3).
 
 ### Critical Points for Assessment
 1.  **Branch Management (Required):** All major processor versions are accessible via dedicated branches, which contain the correct design in the **`rtl`** folder:
-    * **`main`**: Single-Cycle RV32I Design (Basic Goal)
-    * **`pipelined`**: Pipelined RV32I Design (Stretch Goal 1)
-    * **`cached`**: Pipelined + 2-Way Set-Associative Data Cache (Stretch Goal 2)
+    * **`main`**: Single-Cycle RV32I Design Supporting All Base RV32I Instruction Set (Stretch Goal 3)
+    * **`pipelined`**: Pipelined RV32I Design Supporting All Base RV32I Instruction Set (Stretch Goal 1/3)
+    * **`cached`**: Pipelined + 2-Way Set-Associative Data Cache Supporting All Base RV32I Instruction Set (Stretch Goal 1/2/3)
     * **`fpga`**: FPGA-optimized Pipelined Design (Specialized)
     * **`superscalar`**: Superscalar Pipelined Design (Advanced Extension)
 2.  **Verification:** The **`cached`** design successfully passes:
