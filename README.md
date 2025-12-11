@@ -167,4 +167,8 @@ https://github.com/user-attachments/assets/446d3311-f56d-46c1-8dbb-3546735eb4c2
 https://github.com/user-attachments/assets/36910acf-f13f-4513-99b6-7941ee567041
 
 ### **FPGA Implementation**
-Link to video (Demonstrating operation on the FPGA platform using the **`fpga`** branch code)
+
+https://github.com/user-attachments/assets/d1880aa6-b85a-4b15-a0af-775af502e3dc
+
+
+
