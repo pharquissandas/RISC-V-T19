@@ -115,17 +115,17 @@ The team successfully implemented the **Single-Cycle RV32I Design** and achieved
 | | Sign Extend | X | | | |
 | | Testbench | | | | X |
 | | Topfile/implementation | | X | | X |
-| **Single-Cycle RV32I** | ALU (refactor) | X | X | | |
-| | Control Path | | | X | |
-| | Control Unit (refactor) | X | X | | |
+| **Single-Cycle RV32I** | ALU (refactor) | X | X | | X |
+| | Control Path | | | X | X |
+| | Control Unit (refactor) | X | X | | X |
 | | Data Memory | | X | | X |
 | | Data Path | | | | X |
 | | Instruction Memory (refactor) | | X | | |
 | | Program Counter (refactor) | | | | X |
 | | PCSRC Unit | | | | X |
 | | Register File (refactor) | | | X | |
-| | Sign Extend (refactor) | | X | | |
-| | Topfile/implementation | X | X | | |
+| | Sign Extend (refactor) | | X | | X |
+| | Topfile/Implementation | X | X | | X |
 | **Pipelined RV32I** | Pipeline Registers | X | | | |
 | | Pipeline Stages | X | | | X |
 | | Hazard Unit (Detection/Forwarding) | X | | | X |

@@ -1,8 +1,8 @@
-# 32-bit Single-Cycle RISC-V CPU (RV32I Subset)
+# 32-bit Single-Cycle RISC-V CPU (RV32I — Stretch Goal 3 Level)
 
-This repository contains the SystemVerilog implementation of a **32-bit RISC-V CPU** core based on a **single-cycle architecture**. The project evolved from an initial reduced implementation to a more complete design supporting a significant subset of the RV32I instruction set.
-
----
+This branch contains the SystemVerilog implementation of our single-cycle RV32I processor, built on top of the Lab 4 reduced RISC-V CPU and extended into a complete architectural design.
+The core supports **all RV32I base instructions**, excluding only FENCE, ECALL/EBREAK, and CSR instructions—meeting the specification of **Stretch Goal 3: Full RV32I Design**.
+This extended instruction coverage was completed before constructing the pipelined CPU, and provided a stable, fully verified baseline for the later stages of the project.
 
 ## Project Contributors
 
@@ -18,44 +18,41 @@ The project was completed in two phases: the **Reduced RISC-V CPU** and the expa
 | | Sign Extend | X | | | |
 | | Testbench | | | | X |
 | | Topfile/Implementation | | X | | X |
-| **Single-Cycle RV32I** | ALU (refactor) | X | X | | |
-| | Control Path | | | X | |
-| | Control Unit (refactor) | X | X | | |
-| | Data Memory | | X | | |
+| **Single-Cycle RV32I** | ALU (refactor) | X | X | | X |
+| | Control Path | | | X | X |
+| | Control Unit (refactor) | X | X | | X |
+| | Data Memory | | X | | X |
 | | Data Path | | | | X |
 | | Instruction Memory (refactor) | | X | | |
 | | Program Counter (refactor) | | | | X |
 | | PCSRC Unit | | | | X |
 | | Register File (refactor) | | | X | |
-| | Sign Extend (refactor) | | X | | |
-| | Topfile/Implementation | X | X | | |
+| | Sign Extend (refactor) | | X | | X |
+| | Topfile/Implementation | X | X | | X |
 
----
 
 ## Architecture Overview
 
-The CPU uses a **single-cycle datapath** where every instruction completes in one clock cycle. The design is modular, separating the **Datapath** components (e.g., PC, ALU, Memories, Register File) and the **Control Unit** logic.
-
----
+The CPU adopts a single-cycle microarchitecture, with each instruction executing in one clock cycle. The implementation follows a clean modular structure, with a clearly defined **Data Path** (PC, ALU, memories, register file, sign-extension, multiplexers) and a dedicated **Control Path** responsible for decoding instructions and generating all control signals.
 
 ## Module Descriptions
 
 The core logic is implemented in the following SystemVerilog modules:
 
 ### 1. `top.sv`
-The **Top-Level Module** integrates the entire system, connecting the **Datapath** (`data_path`) and the **Control Unit** (`control_path`). It handles global signals like the clock (`clk`) and reset (`rst`).
+  The top-level module instantiates and connects the Control Path and Data Path. It carries only global signals (clk, rst) and the internal control/data signals exchanged between the two subsystems. Its purpose is purely structural, keeping the architecture clean and readable.
 
 ### 2. `data_path.sv`
-The **Datapath Module** instantiates all the functional blocks of the CPU and manages the data flow, using control signals to select operands and results. It outputs the instruction (`Instr`) and the zero flag (`Zero`) to the control logic.
+The **Datapath Module** instantiates all the functional blocks (`pc.sc`, `alu.sv`, `reg_file.sv`, `instr_mem.sv`, `data_mem.sv`, `sign_ext.sv`) of the CPU and manages the data flow, using control signals to select operands and produce results. It outputs the instruction (`Instr`) and the zero flag (`Zero`) to the control logic.
 
 ### 3. `control_path.sv`
-This structural module connects the Instruction output (`Instr`) to the decoding logic in **`control.sv`** and the next-PC determination logic in **`pcsrc_unit.sv`**.
+A structural wrapper that routes the instruction (`Instr`) and ALU status (`Zero`) into: the unified decoder (`control.sv`), and the next-PC selection logic (`pcsrc_unit.sv`). This separation avoids cross-module coupling and keeps the control logic clean and pipeline-ready.
 
 ### 4. `control.sv`
-The **Control Unit** decodes the instruction fields (`opcode`, `funct3`, `funct7`) and generates all necessary control signals (`RegWrite`, `MemWrite`, `ALUControl`, `ResultSrc`, etc.) to drive the datapath.
+Unified instruction decoder combining main-decoder and ALU-decoder functionality to minimise redundancy and avoid rewrite issue between two sub-modules. Generates all control signals (`RegWrite`, `MemWrite`, `ALUControl`, `ResultSrc`, etc.) by decoding (`Instr`) to drive the datapath.
 
 ### 5. `pcsrc_unit.sv`
-The **PC Source Unit** is responsible for determining the next Program Counter value (`PCSrc`). It uses the `Jump`, `Branch` signals, and the ALU's `Zero` flag (for conditional branches) to select between PC+4, PC + Immediate, or ALUResult (for JALR).
+The **PC Source Unit** is responsible for determining the next Program Counter value by generating (`PCSrc`). It uses the `Jump`, `Branch` signals, and the ALU's `Zero` flag (for conditional branches) to select between PC+4, PC + Immediate, or ALUResult (for JALR).
 
 ### 6. `pc.sv`
 The **Program Counter (PC)** is the register holding the address of the current instruction. It updates synchronously on the clock edge based on the next address selected by `PCSrc`.
@@ -83,8 +80,8 @@ The **Register File** implements the 32 general-purpose registers, supporting tw
 ### 9. `instr_mem.sv`
 The **Instruction Memory** is a ROM that stores the program, initialized from `program.hex`.
 
-### 10. `data_mem.sv`
-The **Data Memory** is a synchronous RAM for load and store operations, supporting byte, half-word, and word access, initialized from `data.hex`.
+### 10. `data_mem.sv`3
+The byte-addressed **Data Memory** is a synchronous RAM for load and store operations, supporting byte, half-word, and word access, initialized from `data.hex`.
 
 ### 11. `sign_ext.sv`
 The **Sign Extend** module correctly expands the instruction's immediate field to 32 bits based on the instruction type (I, S, B, J, U).
