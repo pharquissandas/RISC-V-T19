@@ -19,16 +19,14 @@ module top (
     fetch fetch_inst (
         .clk(clk),
         .rst(rst),
-        .en1(~(StallFetch1 || StallPipeline1NC)),
-        .en2 (~(StallFetch2 || StallPipeline2)),
+        .en1(~(StallFetch1)),
+        .en2 (~(StallFetch2)),
         .PCSrcE1(PCSrcE1),
         .PCTargetE1(PCTargetE1),
         .ALUResultE1(ALUResultE1),
         .PCSrcE2(PCSrcE2),
         .PCTargetE2(PCTargetE2),
         .ALUResultE2(ALUResultE2),
-        .StallPipeline2(StallPipeline2),
-        .StallPipeline1NC(StallPipeline1NC),
         .BranchIn1(BranchIn1),
         .BranchIn2(BranchIn2),
         
@@ -50,9 +48,9 @@ module top (
 
     fetch_to_decode_register fetch_to_decode_register_inst(
         .clk(clk),
-        .en1(~(StallDecode1 || StallPipeline1NC) && ~rst), //added reset condition to make sure dependency unit doesnt  stall CPU permanently
+        .en1(~(StallDecode1) && ~rst), //added reset condition to make sure dependency unit doesnt  stall CPU permanently
         .rst1(FlushDecode1),
-        .en2(~(StallDecode2 || StallPipeline2) && ~rst),
+        .en2(~(StallDecode2) && ~rst),
         .rst2(FlushDecode2),
         .PCF1(PCF1),
         .PCPlus8F1(PCPlus8F1),
@@ -108,8 +106,7 @@ module top (
     logic        ALUSrcBD2;
     logic        ALUSrcAD2;
     logic [2:0]  AddressingControlD2; 
-    logic        StallPipeline2;
-    logic        StallPipeline1NC;
+
 
     decode decode_inst (
         .clk(clk),
@@ -155,8 +152,6 @@ module top (
         .ALUSrcBD2(ALUSrcBD2),
         .AddressingControlD1(AddressingControlD1),
         .AddressingControlD2(AddressingControlD2),
-        .StallPipeline2(StallPipeline2),
-        .StallPipeline1NC(StallPipeline1NC),
         .a0(a0),
         .a1(a1)
 
@@ -206,9 +201,9 @@ module top (
         // clock & reset
         .clk              (clk),
         .rst1             (FlushExecute1),
-        .en1              (~(StallExecute1 || StallPipeline1NC)),
+        .en1              (~(StallExecute1)),
         .rst2             (FlushExecute2),
-        .en2              (~(StallExecute2 || StallPipeline2)),
+        .en2              (~(StallExecute2)),
 
         // control signals from Control.sv
         .RegWriteD1        (RegWriteD1),

@@ -197,11 +197,11 @@ always_comb begin
 
     else if (PCSrcE1 != 2'b00) begin
 
-        StallFetch1 = 1'b1;
+        //StallFetch1 = 1'b1;
         FlushDecode1 = 1'b1;
         FlushExecute1 = 1'b1;
 
-        StallFetch2 = 1'b1;
+       // StallFetch2 = 1'b1;
         FlushDecode2 = 1'b1;
         FlushExecute2 = 1'b1;
         FlushMemory2 = 1'b1;
@@ -213,11 +213,11 @@ always_comb begin
 
     else if (PCSrcE2 != 2'b00) begin
         
-        StallFetch1 = 1'b1;
+       // StallFetch1 = 1'b1;
         FlushDecode1 = 1'b1;
         FlushExecute1 = 1'b1;
 
-        StallFetch2 = 1'b1;
+        //StallFetch2 = 1'b1;
         FlushDecode2 = 1'b1;
         FlushExecute2 = 1'b1;
 

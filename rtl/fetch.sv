@@ -9,8 +9,6 @@ module fetch(
     input logic [1:0] PCSrcE2,
     input logic [31:0] PCTargetE2,
     input logic [31:0] ALUResultE2,
-    input StallPipeline2,
-    input StallPipeline1NC, //Stall Pipeline 1 in the next cycle
 
     input logic BranchIn1,
     input logic BranchIn2,
