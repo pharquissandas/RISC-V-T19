@@ -163,17 +163,85 @@ always_comb begin
         //same but opposite to above
     */
 
+       //Branch and Jumps:
 
-    if(JumpD1 != 2'b00 && JumpD2 != 2'b00)begin
+
+    if(BranchD1 && BranchD2)begin
 
         FlushDecode2 = 1'b1;
         FlushExecute2 = 1'b1;
         StallFetch2 = 1'b1;
         StallDecode2 = 1'b1;
 
+        
+        //We also need to flush decode and fetch ? for both pipelines
+        //So that we execute the correct next instruction
+        //however if no branch taken
+        //we dont need to do this for both pipelines
+
+
     end
 
-    else if(JumpD1 != 2'b00)begin
+    else if(BranchD1 && (JumpD2 != 2'b00))begin
+
+        StallFetch1 = 1'b1;
+        StallFetch2 = 1'b1;
+
+        FlushDecode1 = 1'b1;
+        FlushExecute2 = 1'b1;
+    
+    end
+
+    // else if(BranchD1)begin
+
+
+    // end
+
+    else if((JumpD1 != 2'b00) && BranchD2)begin
+
+        StallFetch1 = 1'b1;
+        StallFetch2 = 1'b1;
+
+        FlushDecode1 = 1'b1;
+        FlushExecute2 = 1'b1;
+        
+    end
+    
+    // else if(BranchD2) begin
+
+
+    // end
+
+
+
+    if(JumpD1 != 2'b00 && JumpD2 != 2'b00 && PCSrcE1 == 2'b00 && PCSrcE2 == 2'b00)begin
+
+        
+        if(PCD1 < PCD2)begin
+        
+            FlushDecode2 = 1'b1;
+            FlushExecute2 = 1'b1;
+
+        end
+
+        else begin
+            
+            FlushDecode1 = 1'b1;
+            FlushExecute1 = 1'b1;
+        
+        end
+
+        //StallFetch2 = 1'b1;
+        // StallDecode2 = 1'b1;
+
+        // FlushDecode1 = 1'b1;
+        // FlushDecode2 = 1'b1;
+        // FlushExecute1 = 1'b1;
+        // FlushExecute2 = 1'b1;
+
+    end
+
+    else if(JumpD1 != 2'b00 && PCSrcE1 == 2'b00 && PCSrcE2 == 2'b00)begin
 
         FlushDecode1 = 1'b1;
         FlushDecode2 = 1'b1;
@@ -200,10 +268,10 @@ always_comb begin
     end
 
 
-    else if(JumpD2 != 2'b00)begin
+    else if(JumpD2 != 2'b00 && PCSrcE1 == 2'b00 && PCSrcE2 == 2'b00)begin
 
         FlushDecode1 = 1'b1;
-        FlushDecode2 = 1'b1;
+        StallDecode2 = 1'b1;
 
         StallFetch1 = 1'b1;
         StallFetch2 = 1'b1;
@@ -226,9 +294,40 @@ always_comb begin
 
     end
 
+    if(JumpD1) begin
+
+        if(PCD1 < PCD2) begin
+
+            // StallFetch1 = 1'b1;
+            // StallFetch2 = 1'b1;
+
+            // FlushDecode1 = 1'b1;
+            // FlushDecode2 = 1'b1;
+            
+            // FlushExecute2 = 1'b1;
+
+        end
+
+    end
+
+    if(JumpD2) begin
+
+        if(PCD2 < PCD1)begin
+
+            StallFetch1 = 1'b1;
+            StallFetch2 = 1'b1;
+
+            FlushDecode1 = 1'b1;
+            FlushDecode2 = 1'b1;
+            
+            FlushExecute1 = 1'b1;
 
 
-    if((Rs4D == RdD1 || Rs5D == RdD1) && !(RdD1 == 0) && JumpD1 == 2'b00 && JumpD2 == 2'b00 && !ResultSrcE2 == 2'b01)begin
+        end
+
+    end
+
+    if((Rs4D == RdD1 || Rs5D == RdD1) && !(RdD1 == 0) && JumpD1 == 2'b00 && JumpD2 == 2'b00 && !(ResultSrcE2 == 2'b01))begin
 
         // StallExecute2 = 1'b1;
         // StallDecode2 = 1'b1; 
@@ -263,25 +362,48 @@ always_comb begin
     end
 
 
+    // if(BranchD1 && (JumpD2 != 2'b00))begin
 
+    //     // FlushDecode2 = 1'b1;
+    //     // FlushExecute2 = 1'b1;
+    //     // StallFetch2 = 1'b1;
+    //     // StallDecode2 = 1'b1;
+
+    //     StallFetch1 = 1'b1;
+    //     StallFetch2 = 1'b1;
+
+    //     FlushDecode1 = 1'b1;
+    //     FlushExecute2 = 1'b1;
+
+    // end
+
+    // if((JumpD1 != 2'b00) && BranchD2)begin
+
+    //     FlushDecode2 = 1'b1;
+    //     FlushExecute2 = 1'b1;
+    //     StallFetch2 = 1'b1;
+    //     StallDecode2 = 1'b1;
+
+
+    // end
 
 
     
-    if(BranchD1 && BranchD2)begin
+    // if(BranchD1 && BranchD2)begin
     
-        FlushDecode2 = 1'b1;
-        FlushExecute2 = 1'b1;
-        StallFetch2 = 1'b1;
-        StallDecode2 = 1'b1;
+    //     FlushDecode2 = 1'b1;
+    //     FlushExecute2 = 1'b1;
+    //     StallFetch2 = 1'b1;
+    //     StallDecode2 = 1'b1;
 
         
-        //We also need to flush decode and fetch ? for both pipelines
-        //So that we execute the correct next instruction
-        //however if no branch taken
-        //we dont need to do this for both pipelines
+    //     //We also need to flush decode and fetch ? for both pipelines
+    //     //So that we execute the correct next instruction
+    //     //however if no branch taken
+    //     //we dont need to do this for both pipelines
 
 
-    end
+    // end
     //redundant logic:
     if(PCSrcE1 != 2'b00 && PCSrcE2 != 2'b00)begin//branches in both pipelines
 
@@ -455,5 +577,11 @@ always_comb begin
 
     end
 end
+
+
+ 
+
+
+
 
 endmodule
