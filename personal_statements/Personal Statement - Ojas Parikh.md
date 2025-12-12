@@ -1,6 +1,121 @@
-Name: Ojas Parikh \
-CID: __________ \
-GitHub username: ojas-parikh
+# Personal Statement
+
+**Name:** Ojas Parikh \
+**CID:** 02574263 \
+**GitHub Username:** ojas-parikh
+
+---
+
+## Table of Contents
+* [Summary](#summary)
+* [Contributions](#contributions)
+    * [Reduced RISC-V CPU (Lab 4)](#reduced-risc-v-cpu-lab-4)
+    * [Pipelined RV32I Design](#pipelined-rv32i-design)
+    * [Superscalar RV32I RISC-V CPU](#superscalar-rv32i-risc-v-cpu)
+* [Future Work](#future-work)
+* [Conclusion and Self-Reflection](#conclusion-and-self-reflection)
+
+---
 
 ## Summary
-Each individual's personal statement explaining what you contributed, a reflection about what you have learned in this project, mistakes you made, special design decisions, and what you might do differently if you were to do it again or have more time. This statement must be succinct and to the point, yet must include sufficient details for me to check against the commit history of the repo so that any claims can be verified. Including links to a selection of specific commits that demonstrate your work would be most helpful. If you work with another member of your group on a module, make sure to give them co-author credit. Additionally, try to make meaningful commit messages.
+
+During the project, my main responsiblities were to design the pipelined processor and a superscalar processor. Most of my time was spent implementing these architectures, with significant time spent debugging issues.
+
+---
+
+## Contributions
+
+### Reduced RISC-V CPU (Lab 4)
+
+During Lab 4, we split up the work evenly between us. I was reponsible for the following:
+
+* **Register File:** [`4303fc`](https://github.com/pharquissandas/RISC-V-T19/commit/4303fc20bdbd25d0257a68fe0f48273a5ed1e8d0)
+* **ALU:** [`4303fc`](https://github.com/pharquissandas/RISC-V-T19/commit/4303fc20bdbd25d0257a68fe0f48273a5ed1e8d0)
+
+---
+
+### Pipelined RV32I Design
+
+I implemented a five-stage pipeline with fetch,decode,execute,memory and writeback stages. In order to deal with dependencies between pipeline stages I implemented a hazard unit to identify and deal with data hazards, I also implemented the required logic to deal with control hazards. Significant testing and debugging was required to verify pipelining had been implemented correctly.
+
+My work on pipelining was not included in the final design, however it can be found in the archive branch of this repository.
+
+**Final Design:** Commit:[`a884fod`](https://github.com/pharquissandas/RISC-V-T19/commit/a884f0d0ad0df7f0d6ec27a82238a876cdcdc9b2)
+
+* **Hazard Unit:**
+    * I first implemented forwarding to deal with data hazards, Commit: [`b99ab1c`](https://github.com/pharquissandas/RISC-V-T19/commit/b99ab1c287591292d9802eac294f905419118de4)
+    * I then implemented stalls to deal with load data hazards and control hazards due to branch instructions, Commits:[`fa73d4b`](https://github.com/pharquissandas/RISC-V-T19/commit/fa73d4b6f856f8f70fc04b1858819cbaf4b61010), [`a0d7f62`](https://github.com/pharquissandas/RISC-V-T19/commit/a0d7f62b14bf1a33f38e89a7a73fd72fcfdbff26)
+    * Testing and using the generated waveforms allowed me to fix errors I made in my initial implementation of the hazard unit, with a final hazard unit implemented in commit [`1246161`](https://github.com/pharquissandas/RISC-V-T19/commit/12461615a915104ecf25520e7409c4f324d4108a)
+* **Modifications of Pipeline Registers:**
+    * Mikhail had implemented pipeline registers, however these had to be corrected or modified such as to include hazard unit signals, Commits: [`759a724`](https://github.com/pharquissandas/RISC-V-T19/commit/759a7247b4077e98a536c23cf9c0d663c8464e38),[`6ccb2fa`](https://github.com/pharquissandas/RISC-V-T19/commit/6ccb2fa6535d8b3f4718dd47be82c3ca4c423387),[`fa73d4b`](https://github.com/pharquissandas/RISC-V-T19/commit/fa73d4b6f856f8f70fc04b1858819cbaf4b61010),[`a0d7f62`](https://github.com/pharquissandas/RISC-V-T19/commit/a0d7f62b14bf1a33f38e89a7a73fd72fcfdbff26),[`b6756dc`](https://github.com/pharquissandas/RISC-V-T19/commit/b6756dccfa7318c5b30847e9fd44ecf7625017a0)   
+* **Pipeline Stages:**
+The existing datapath and controlpath logic from the single-cycle design was used and split across each of the pipeline stages. 
+    * **Fetch**   Commits:   [`5f66596`](https://github.com/pharquissandas/RISC-V-T19/commit/5f66596851f944a8a58361126f40627c00153fa8),[`8ec989a`](https://github.com/pharquissandas/RISC-V-T19/commit/8ec989a0196cc1d4bb94c74f321c201d1e4cf5e1) 
+    * **Decode**    Commits: [`450a8af`](https://github.com/pharquissandas/RISC-V-T19/commit/450a8af68a16bc68e46b1abc183ad90ceb694e8a),[`8ec989a`](https://github.com/pharquissandas/RISC-V-T19/commit/8ec989a0196cc1d4bb94c74f321c201d1e4cf5e1)
+    * **Execute**   Commits: [`27ed9ab`](https://github.com/pharquissandas/RISC-V-T19/commit/27ed9ab55dda31ba60b24e7a5c09cb20ed3039f4),[`8ec989a`](https://github.com/pharquissandas/RISC-V-T19/commit/8ec989a0196cc1d4bb94c74f321c201d1e4cf5e1),[`b636d97`](https://github.com/pharquissandas/RISC-V-T19/commit/b636d97433a03a97fd6831a2d15b48cdeb613b63),[`a19267a`](https://github.com/pharquissandas/RISC-V-T19/commit/a19267aea365aff1a8ae1b71b3b73d5cfd93d021) 
+    * **Memory**    Commits: [`e747de0`](https://github.com/pharquissandas/RISC-V-T19/commit/e747de0727aeb35fd09452121e2705cfcb23d4ed)
+    * **Writeback** Commits: [`37eddc9`](https://github.com/pharquissandas/RISC-V-T19/commit/37eddc9b29515192ad84bb1837ce09a2acfbe2d8)
+
+* **Top Layer:** Commits: [`8ec989a`](https://github.com/pharquissandas/RISC-V-T19/commit/8ec989a0196cc1d4bb94c74f321c201d1e4cf5e1),[`759a724`](https://github.com/pharquissandas/RISC-V-T19/commit/759a7247b4077e98a536c23cf9c0d663c8464e38)
+
+* **Verification and Debugging:** I heavily utilised the .vcd waveform files generated by Verilator in order to debug my design. My design was integration tested using all the tests in [verify.cpp](https://github.com/pharquissandas/RISC-V-T19/blob/a884f0d0ad0df7f0d6ec27a82238a876cdcdc9b2/repo/tb/tests/verify.cpp) and it passed all these tests. 
+  
+---
+
+### Superscalar RV32I RISC-V CPU
+
+I implemented a unified superscalar processor with two parallel pipelines. In the ideal scenario with no dependencies and no stalls the processor would execute 2 instructions per cycle in parallel. Significant work was required to deal with hazards and dependencies.
+
+**Final Design:** [`9bfd537`](https://github.com/pharquissandas/RISC-V-T19/commit/9bfd537695f08e808f0ac34e7318bbdf72421fee)
+
+* **Modified Hazard Unit:**
+    * **Jumps:** I implemented logic so that if both instructions in the decode stage are jump instructions we execute the first one only. If we have a jump instruction in pipeline 1 or 2 we stall the program counters and flush the fetch to decode register, this gives a one cycle delay so that the next instructions fetched are the instructions required after the jump.  [`dae9c51`](https://github.com/pharquissandas/RISC-V-T19/commit/dae9c51cb50b63b2ba4e4ace4a39f7842038c0ab#diff-de5289cb459882963650363cad09e12b2e0b01dcbf96f95accef7be86b416a83)
+    * **Branches:**
+        * I implemented logic so that if both instructions in the decode stage are branch instructions we execute the instruction in pipeline 1 only. This is because if the branch is taken in pipeline 1 then the instruction in pipeline 2 should never have been fetched and certainly not executed. Commits: [`76935ce`](https://github.com/pharquissandas/RISC-V-T19/commit/76935ce73c81c832bc9bc205e7a9f67c0bb90a1d)
+        * I also reused logic from the team's pipeline design so that if in the execute stage a branch is taken, a bubble is passed through the decode and execute stages in the next clock cycle. This ensures the next instructions to execute start from the instruction we branched to. Commits: [`76935ce`](https://github.com/pharquissandas/RISC-V-T19/commit/76935ce73c81c832bc9bc205e7a9f67c0bb90a1d)
+    * **Forwarding:** I added logic so that results could be forwarded across pipelines as well. For example, a result can be forwarded from the memory stage of pipeline 2 to the execute stage of pipeline 1. My initial implementation checked the writeback and memory stages of each pipeline one after the other, however the correct logic is to check both the writeback stages and then both the memory stages, I fixed this in the second commit. Commits: [`76935ce`](https://github.com/pharquissandas/RISC-V-T19/commit/76935ce73c81c832bc9bc205e7a9f67c0bb90a1d), [`a615fb1`](https://github.com/pharquissandas/RISC-V-T19/commit/a615fb102503b6a84a89db7998c16fcfea20534f)
+    * **Dependencies between pipelines:** A unique challenge with superscalar architectures is that at anytime you could have fetched two instructions in which there may be dependencies, such as the source register of one instruction is the destination register of the other instruction. In cases like these with a single pipeline we could just forward results from the writeback and memory stage, but here the instructions would be executing in parallel. To solve this we have to stall the execution of one pipeline to delay it by one cycle to allow for forwarding. Commits: [`a615fb1`](https://github.com/pharquissandas/RISC-V-T19/commit/a615fb102503b6a84a89db7998c16fcfea20534f)
+    * **Conflicts between pipelines:** Another challenge with a superscalar processor, is that the instructions you fetch may both be writing the same register. This can't be allowed to happen so we must stall the pipeline with the later instruction so that it executes one cycle after the earlier instruction. Commits: [`a615fb1`](https://github.com/pharquissandas/RISC-V-T19/commit/a615fb102503b6a84a89db7998c16fcfea20534f)
+    *  **Loads and Stores:** One issue I noticed during testing is that if in pipeline 1 we have a store and pipeline 2 we have a load both with the same address in memory, this can lead to a RAW hazard. I initially tried to solve this by seeing if the address in memory was the same for both instructions and then holding the load instruction in the execute stage while the store instruction entered the memory stage. However this requires waiting for the instructions to execute (in order to get the address in memory), which was too late and caused issues with the next instructions. Therefore I made a design choice that regardless, if in the decode stage we have a store in pipeline 1 and a load in pipeline 2, we will delay the execution of the load instruction by one cycle. [`9bfd537`](https://github.com/pharquissandas/RISC-V-T19/commit/9bfd537695f08e808f0ac34e7318bbdf72421fee)
+* **Modified Pipeline Registers:** Added two sets of pipeline registers by modifying the exisiting RTL so that each register has two seperate enable and/or reset inputs. [`1c73288`](https://github.com/pharquissandas/RISC-V-T19/commit/1c7328859d830ad0c907ccc9b7fcbd0f6eed166f)
+* **Modified Pipeline Stages:**
+  
+*   * **Fetch:**
+        * PC: Two program counters were required so that two instructions could be fetched at a time [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172), [`dae9c51`](https://github.com/pharquissandas/RISC-V-T19/commit/dae9c51cb50b63b2ba4e4ace4a39f7842038c0ab#diff-de5289cb459882963650363cad09e12b2e0b01dcbf96f95accef7be86b416a83)
+        * Instruction Memory: Imem had to be modified so two addresses could be read and two instructions fetched in one cycle [`c9be462`](https://github.com/pharquissandas/RISC-V-T19/commit/c9be462393d55401738bb8e216c31539a67b576d)
+    * **Decode:**
+        * Register File: The register file was modified to have 6 ports (4 read ports and 2 write ports) [`cb015b8`](https://github.com/pharquissandas/RISC-V-T19/commit/cb015b86d387822978152534fbcecaec600701e4)
+        * Control Unit and Extend: An extra control unit and extend block were added for the second pipeline [`4e7ff90`](https://github.com/pharquissandas/RISC-V-T19/commit/4e7ff9089f07a501d3728448ef36325639308f0d), [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172)
+    * **Execute:**
+        * ALU: An extra ALU was added: [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172)
+        * PCSrc: An extra PCSrc unit was added: [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172)
+    * **Memory:**
+        * Data Memory: Data memory was modified to have 4 ports (2 read ports and 2 write ports) [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172)
+    * **Writeback**
+        * Result: Added an additional result output for the second pipeline [`51ac640`](https://github.com/pharquissandas/RISC-V-T19/commit/51ac640a23edcb8077313020c370a41cd66b0172),[`dae9c51`](https://github.com/pharquissandas/RISC-V-T19/commit/dae9c51cb50b63b2ba4e4ace4a39f7842038c0ab)
+      
+* **Verification and Debugging:** I heavily utilised the .vcd waveform files generated by Verilator in order to debug my design. With the waveforms, I traced through the what each stage was doing cycle by cycle to identify issues with my implementation. Currently, my design passes 47/49 tests in our [verify.cpp](https://github.com/pharquissandas/RISC-V-T19/blob/superscalar/tb/tests/verify.cpp) file. I did not have time to verify the design with the VBuddy tests.
+
+---
+
+### Future Work
+
+**Out-of-order processor:** I think my current superscalar design is quite inefficient as to deal with most depencies it has to stall one of the pipelines. With an out-of-order processor, we maximise instruction throughput by issuing independent instructions as quickly as possible without constraining to the order of the instructions in the program. I had initially planned to implement this after I finished an initial superscalar design, however it took me longer than expected to develop this initial design.
+
+**Diversified Architecture:** As a team, we did not implement floating point operations, however in future I may do this and then I may change the superscalar architecture to be diversified, as in having one pipeline for integer operations and one pipeline for floating point operations as is typical in industry.
+
+**Cache and Branch Predictor:** Though my teammates had designed a data cache and branch predictor in the pipeline design, I was not able to include these in my superscalar architecture due to time constraints. However these would be good additions to the design and could particularly help with reducing the number of stalls due to branches and this would lead to more continued use of both pipelines in parallel.
+
+---
+
+### Conclusion and Self-Reflection
+
+I thoroughly enjoyed working on this project, I have significantly improved my knowledge of the workings of CPUs and of ISAs. Implementing a superscalar processor was particularly rewarding as it was completely brand-new to me and the logic and architectural decisions were my own.
+
+I think if I were to do this project again, I would focus much more on readability and simplicity of my RTL. Part of the reason that my pipelining work was redone, was that my teammate did not undestand what I had done.
+
+I think implenting unit testing would have also been a good idea as it would have allowed for greater thought and understanding about the working of each component in the processor.
+
+I think as a team we didn't communicate and set deadlines well. At times, certain teammates were doing work without informing the rest of us, therefore not all of us could contribute as much as we wanted to. There should have been a stricter division of tasks, a few times during the project as I work slightly slower than my teammates the work that was allocated to me was taken over by another teammate without communicating with me. I was also at fault here, as I should have communicated more about my progress and the time I needed to finish the work.
+
+Overall, I have learnt a lot during this project and I am excited to continue my work on the superscalar processor in my own time.
