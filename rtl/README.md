@@ -36,7 +36,7 @@ However, the CPU does not always execute two instructions per cycle due to the e
 
 ### 2. Pipeline Registers
 These modules are synchronous registers used to pass control and data signals between adjacent pipeline stages. Each pipeline register module has two reset and enable inputs, resulting in each module encompassing two registers (one for each pipeline). The reset and enable inputs are used to implement stalls and flushes to deal with different hazards and dependencies.
-* **`fetch_to_decode_register` (F2D)**: Passes PC, PC+4, PC+8 and Instruction (`InstrF`) from F to D.
+* **`fetch_to_decode_register` (F2D)**: Passes PC, PC+4 and Instruction (`InstrF`) from F to D.
 * **`decode_to_execute_register` (D2E)**: Passes register data (`RD1D`, `RD2D` or `RD4D`, `RD5D`), immediate, PC, and control signals from D to E. Includes reset/flush logic (`FlushExecute`) for control hazards.
 * **`execute_to_memory_register` (E2M)**: Passes ALU result, write data (`WriteDataE`), and control signals from E to M.
 * **`memory_to_writeback_register` (M2W)**: Passes ALU result, read data, PC+4, and control signals from M to W.
