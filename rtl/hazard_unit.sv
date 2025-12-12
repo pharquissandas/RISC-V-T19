@@ -349,7 +349,7 @@ always_comb begin
     end
 
 
-    if((RdD1 == RdD2) && !(BranchD1 || BranchD2) && !(RdD1 == 0 || RdD2 == 0) && JumpD1 == 2'b00 && JumpD2 == 2'b00)begin
+    if((RdD1 == RdD2) && !(RdD1 == 0 || RdD2 == 0) && JumpD1 == 2'b00 && JumpD2 == 2'b00)begin
 
         StallExecute2 = 1'b1;
         StallDecode1 = 1'b1;
