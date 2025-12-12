@@ -116,7 +116,7 @@ The team successfully implemented the Single-Cycle RV32I processor and progresse
 | | Testbench | | | | X |
 | | Topfile/implementation | | X | | X |
 | **Single-Cycle RV32I** | ALU (refactor) | X | X | | X |
-| | Control Path | | | X | X |
+| | Control Path | | |  | X |
 | | Control Unit (refactor) | X | X | | X |
 | | Data Memory | | X | | X |
 | | Data Path | | | | X |
@@ -126,9 +126,9 @@ The team successfully implemented the Single-Cycle RV32I processor and progresse
 | | Register File (refactor) | | | X | |
 | | Sign Extend (refactor) | | X | | X |
 | | Topfile/Implementation | X | X | | X |
-| **Pipelined RV32I** | Pipeline Registers | X | | | |
-| | Pipeline Stages | X | | | X |
-| | Hazard Unit (Detection/Forwarding) | X | | | X |
+| **Pipelined RV32I** | Pipeline Registers | X | | (X) | |
+| | Pipeline Stages | X | |(X) | X |
+| | Hazard Unit (Detection/Forwarding) | X | |(X) | X |
 | **Data Memory Cache** | Memory (refactor) | | X | | |
 | | Direct mapped cache | | X | | |
 | | Two-way set associative cache | | X | | |
@@ -169,6 +169,5 @@ https://github.com/user-attachments/assets/36910acf-f13f-4513-99b6-7941ee567041
 ### **FPGA Implementation**
 
 https://github.com/user-attachments/assets/d1880aa6-b85a-4b15-a0af-775af502e3dc
-
 
 
